@@ -27,3 +27,40 @@ export const addPlant = async (req, res) => {
     res.status(400).json({ message: error.message })
   }
 }
+
+// Update plant
+export const updatePlant = async (req, res) => {
+  try {
+    const { id } = req.params
+    const updatedPlant = await Plant.findByIdAndUpdate(id, req.body, {
+      new: true,
+    })
+
+    if (!updatePlant) {
+      return res.status(404).json({ message: 'Plant not found' })
+    }
+
+    res.status(200).json({
+      message: 'Plant updated successfully',
+      plant: updatePlant,
+    })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+//Delete plant
+export const deletePlant = async (req, res) => {
+  try {
+    const { id } = req.params
+    const deletePlant = await Plant.findByIdAndDelete(id)
+
+    if (!deletePlant) {
+      return res.status(404).json({ message: 'Plant not found' })
+    }
+
+    res.status(200).json({ message: 'Plant deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}

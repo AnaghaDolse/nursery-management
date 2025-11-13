@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const plantSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     price: { type: Number, required: true },
     stock: { type: Number, default: 0 },
     description: { type: String },
