@@ -1,15 +1,16 @@
 import Plant from '../models/Plant.js'
 
+// Get all plants
 export const getPlans = async (req, res) => {
   try {
-    const plants = await Plant.find()
+    const plants = await Plant.find().populate('category')
     res.status(200).json(plants)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
 
-//Add new plant
+// Add new plant
 export const addPlant = async (req, res) => {
   const { name, category, price, stock, description, image } = req.body
   try {
@@ -21,6 +22,7 @@ export const addPlant = async (req, res) => {
       description,
       image,
     })
+
     await newPlant.save()
     res.status(201).json(newPlant)
   } catch (error) {
@@ -32,30 +34,32 @@ export const addPlant = async (req, res) => {
 export const updatePlant = async (req, res) => {
   try {
     const { id } = req.params
+
     const updatedPlant = await Plant.findByIdAndUpdate(id, req.body, {
       new: true,
     })
 
-    if (!updatePlant) {
+    if (!updatedPlant) {
       return res.status(404).json({ message: 'Plant not found' })
     }
 
     res.status(200).json({
       message: 'Plant updated successfully',
-      plant: updatePlant,
+      plant: updatedPlant,
     })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
 
-//Delete plant
+// Delete plant
 export const deletePlant = async (req, res) => {
   try {
     const { id } = req.params
-    const deletePlant = await Plant.findByIdAndDelete(id)
 
-    if (!deletePlant) {
+    const deletedPlant = await Plant.findByIdAndDelete(id)
+
+    if (!deletedPlant) {
       return res.status(404).json({ message: 'Plant not found' })
     }
 

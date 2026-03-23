@@ -4,6 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import connectDB from './config/db.js'
 import plantRoutes from './routes/plantRoutes.js'
+import categoryRoutes from './routes/categoryRoutes.js'
 
 dotenv.config()
 const app = express()
@@ -18,7 +19,7 @@ app.use(express.json())
 //   .catch((err) => console.error('❌ MongoDB Connection Error:', err))
 
 //Database Connection
-connectDB();
+connectDB()
 
 // Default route
 // app.get('/', (req, res) => {
@@ -26,7 +27,8 @@ connectDB();
 // })
 
 //Routes
-app.use("/api/plants", plantRoutes);
+app.use('/api/plants', plantRoutes)
+app.use('/api/categories', categoryRoutes)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {

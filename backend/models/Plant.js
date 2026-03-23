@@ -2,10 +2,10 @@ import mongoose from 'mongoose'
 
 const plantSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
-    price: { type: Number, required: true },
-    stock: { type: Number, default: 0 },
+    name: { type: String, required: true, trim: true, index: true },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    price: { type: Number, required: true, min: 0 },
+    stock: { type: Number, default: 0, min: 0 },
     description: { type: String },
     image: { type: String },
   },
