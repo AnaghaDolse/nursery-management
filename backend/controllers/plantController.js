@@ -1,7 +1,7 @@
 import Plant from '../models/Plant.js'
 
 // Get all plants
-export const getPlans = async (req, res) => {
+export const getPlants = async (req, res) => {
   try {
     const plants = await Plant.find().populate('category')
     res.status(200).json(plants)
