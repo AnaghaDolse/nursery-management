@@ -6,6 +6,11 @@ export const fetchPlants = createAsyncThunk("plants/fetchPlants", async () => {
   return response.data;
 });
 
+export const addPlant = createAsyncThunk("plants/addPlant", async (plantData) => {
+  const response = await axios.post("http://localhost:5000/api/plants", plantData);
+  return response.data;
+});
+
 const plantSlice = createSlice({
   name: "plants",
   initialState: {
@@ -26,7 +31,10 @@ const plantSlice = createSlice({
       .addCase(fetchPlants.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      });
+      })
+      .addCase(addPlant.fulfilled, (state, action) => {
+        state.data.push(action.payload);
+      })
      },
 }); 
 
