@@ -5,11 +5,12 @@ import {
   updatePlant,
   deletePlant,
 } from '../controllers/plantController.js'
+import { upload } from '../middleware/upload.js'
 
 const router = express.Router()
 
 router.get('/', getPlants)
-router.post('/', addPlant)
+router.post('/', upload.single('image'), addPlant)
 router.put('/:id', updatePlant)
 router.delete('/:id', deletePlant)
 

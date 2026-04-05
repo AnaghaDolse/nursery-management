@@ -4,6 +4,15 @@ import Category from '../models/Category.js'
 // @route   POST /api/categories
 // @access  Public (later you can make it Admin only)
 
+export const getCategories = async (req, res) => {
+  try {
+    const categories = await Category.find()
+    res.status(200).json(categories)
+  } catch (error) {
+    res.status(500).json({ message: error.message})
+  }
+}
+
 export const createCategory = async (req, res) => {
   try {
     let { name, description } = req.body
