@@ -8,12 +8,13 @@ const AddPlant = () => {
   const { data: categories } = useSelector((state) => state.categories)
   const [form, setForm] = useState({
     name: '',
-    categoryId: '',
+    category: '',
     price: '',
     stock: '',
     description: '',
-    image: '',
   })
+
+  const [image, setImage] = useState(null)
 
   useEffect(() => {
     dispatch(fetchCategories())
@@ -26,9 +27,21 @@ const AddPlant = () => {
     })
   }
 
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0])
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(addPlant(form))
+    const formData = new FormData()
+    formData.append('name', form.name)
+    formData.append('category', form.category)
+    formData.append('price', form.price)
+    formData.append('stock', form.stock)
+    formData.append('description', form.description)
+    formData.append('image', image)
+
+    dispatch(addPlant(formData))
   }
 
   return (
@@ -44,7 +57,7 @@ const AddPlant = () => {
       <select name='category' onChange={handleChange}>
         <option value=''>Select Category</option>
         {categories.map((category) => (
-          <option key={category.id} value={category.id}>
+          <option key={category._id} value={category._id}>
             {category.name}
           </option>
         ))}
@@ -56,7 +69,7 @@ const AddPlant = () => {
         placeholder='Description'
         onChange={handleChange}
       ></textarea>
-      {/* <input type="file" name="image" onChange={handleChange} /> */}
+      <input type='file' name='image' onChange={handleFileChange} />
       <button type='submit'>Add Plant</button>
     </form>
   )

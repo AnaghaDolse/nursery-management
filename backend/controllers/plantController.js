@@ -15,7 +15,6 @@ export const addPlant = async (req, res) => {
   const { name, category, price, stock, description } = req.body
 
   const image = req.file ? `/uploads/${req.file.filename}` : null
-
   try {
     const newPlant = new Plant({
       name,

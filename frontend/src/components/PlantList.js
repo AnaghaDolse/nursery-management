@@ -23,6 +23,7 @@ const PlantList = () => {
             <th>Category</th>
             <th>Price</th>
             <th>Stock</th>
+            <th>Image</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +33,13 @@ const PlantList = () => {
               <td>{plant.category?.name}</td>
               <td>{plant.price}</td>
               <td>{plant.stock}</td>
+              <td>
+                <img
+                  src={`http://localhost:5000${plant.image}`}
+                  alt={plant.name}
+                  width='100'
+                />
+              </td>
             </tr>
           ))}
         </tbody>
