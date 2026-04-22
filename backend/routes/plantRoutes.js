@@ -11,7 +11,7 @@ const router = express.Router()
 
 router.get('/', getPlants)
 router.post('/', upload.single('image'), addPlant)
-router.put('/:id', updatePlant)
+router.put('/:id', upload.single('image'), updatePlant)
 router.delete('/:id', deletePlant)
 
 export default router

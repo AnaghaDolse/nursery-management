@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchPlants } from '../features/plants/plantSlice'
+import { deletePlant } from '../features/plants/plantSlice'
 
-const PlantList = () => {
+const PlantList = ({ setEditingPlant }) => {
   const dispatch = useDispatch()
   const { data, loading, error } = useSelector((state) => state.plants)
 
@@ -23,7 +24,9 @@ const PlantList = () => {
             <th>Category</th>
             <th>Price</th>
             <th>Stock</th>
+            <th>Description</th>
             <th>Image</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -33,12 +36,19 @@ const PlantList = () => {
               <td>{plant.category?.name}</td>
               <td>{plant.price}</td>
               <td>{plant.stock}</td>
+              <td>{plant.description}</td>
               <td>
                 <img
                   src={`http://localhost:5000${plant.image}`}
                   alt={plant.name}
                   width='100'
                 />
+              </td>
+              <td>
+                <button onClick={() => dispatch(deletePlant(plant._id))}>
+                  Delete
+                </button>
+                <button onClick={() => setEditingPlant(plant)}>Edit</button>
               </td>
             </tr>
           ))}

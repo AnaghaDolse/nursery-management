@@ -36,8 +36,21 @@ export const addPlant = async (req, res) => {
 export const updatePlant = async (req, res) => {
   try {
     const { id } = req.params
+    const { name, category, price, stock, description } = req.body
 
-    const updatedPlant = await Plant.findByIdAndUpdate(id, req.body, {
+    const updatedData = {
+      name,
+      category,
+      price,
+      stock,
+      description,
+    }
+
+    if (req.file) {
+      updatedData.image = `/uploads/${req.file.filename}`
+    }
+
+    const updatedPlant = await Plant.findByIdAndUpdate(id, updatedData, {
       new: true,
     })
 

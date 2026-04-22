@@ -18,6 +18,26 @@ export const addPlant = createAsyncThunk(
   },
 )
 
+export const updatePlant = createAsyncThunk(
+  'plants/updatePlant',
+  async ({ id, updatedData }) => {
+    const response = await axios.put(
+      `http://localhost:5000/api/plants/${id}`,
+      updatedData,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    )
+    return response.data
+  },
+)  
+
+export const deletePlant = createAsyncThunk(
+  'plants/deletePlant',
+  async (id) => {
+    await axios.delete(`http://localhost:5000/api/plants/${id}`)
+    return id
+  },
+)
+
 const plantSlice = createSlice({
   name: 'plants',
   initialState: {
@@ -41,6 +61,9 @@ const plantSlice = createSlice({
       })
       .addCase(addPlant.fulfilled, (state, action) => {
         state.data.push(action.payload)
+      })
+      .addCase(deletePlant.fulfilled, (state, action) => {
+        state.data = state.data.filter((plant) => plant._id !== action.payload)
       })
   },
 })
