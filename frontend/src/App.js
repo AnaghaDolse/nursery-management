@@ -6,7 +6,7 @@ import PlantList from './components/PlantList'
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
   return (
-    <div className='App'>
+    <div className='container'>
       <h1>Welcome to Jhaad Ugao !</h1>
       <AddPlant editingPlant={editingPlant} setEditingPlant={setEditingPlant}/>
       <PlantList setEditingPlant={setEditingPlant}/>

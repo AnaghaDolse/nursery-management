@@ -52,7 +52,7 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
     formData.append('stock', form.stock)
     formData.append('description', form.description)
 
-    if(image) {
+    if (image) {
       formData.append('image', image)
     }
 
@@ -61,7 +61,7 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
         updatePlant({
           id: editingPlant._id,
           updatedData: formData,
-        })
+        }),
       )
       setEditingPlant(null)
     } else {
@@ -70,7 +70,7 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} >
       <h2>Add New Plant</h2>
 
       <input
@@ -88,8 +88,18 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
           </option>
         ))}
       </select>
-      <input name='price' value={form.price} placeholder='Price' onChange={handleChange} />
-      <input name='stock' value={form.stock} placeholder='Stock' onChange={handleChange} />
+      <input
+        name='price'
+        value={form.price}
+        placeholder='Price'
+        onChange={handleChange}
+      />
+      <input
+        name='stock'
+        value={form.stock}
+        placeholder='Stock'
+        onChange={handleChange}
+      />
       <textarea
         name='description'
         placeholder='Description'
@@ -97,7 +107,9 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
         onChange={handleChange}
       ></textarea>
       <input type='file' name='image' onChange={handleFileChange} />
-      <button type='submit'>{editingPlant ? 'Update Plant' : 'Add Plant'}</button>
+      <button type='submit' className='add'>
+        {editingPlant ? 'Update Plant' : 'Add Plant'}
+      </button>
     </form>
   )
 }

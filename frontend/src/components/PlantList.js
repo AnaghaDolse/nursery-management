@@ -45,10 +45,15 @@ const PlantList = ({ setEditingPlant }) => {
                 />
               </td>
               <td>
-                <button onClick={() => dispatch(deletePlant(plant._id))}>
+                <button className='edit' onClick={() => setEditingPlant(plant)}>
+                  Edit
+                </button>
+                <button
+                  className='delete'
+                  onClick={() => dispatch(deletePlant(plant._id))}
+                >
                   Delete
                 </button>
-                <button onClick={() => setEditingPlant(plant)}>Edit</button>
               </td>
             </tr>
           ))}
