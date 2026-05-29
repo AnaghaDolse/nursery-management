@@ -8,12 +8,11 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
   const { data: categories } = useSelector((state) => state.categories)
   const [form, setForm] = useState({
     name: '',
-    category: '',
     price: '',
     stock: '',
     description: '',
   })
-
+  const [selectedCategories, setSelectedCategories] = useState([])
   const [image, setImage] = useState(null)
 
   useEffect(() => {
@@ -24,11 +23,11 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
     if (editingPlant) {
       setForm({
         name: editingPlant.name,
-        category: editingPlant.category?._id || '',
         price: editingPlant.price,
         stock: editingPlant.stock,
         description: editingPlant.description,
       })
+      setSelectedCategories(editingPlant.category?.map((cat) => cat._id) || [])
     }
   }, [editingPlant])
 
@@ -47,7 +46,7 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
     e.preventDefault()
     const formData = new FormData()
     formData.append('name', form.name)
-    formData.append('category', form.category)
+    formData.append('category', JSON.stringify(selectedCategories))
     formData.append('price', form.price)
     formData.append('stock', form.stock)
     formData.append('description', form.description)
@@ -70,7 +69,7 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} >
+    <form onSubmit={handleSubmit}>
       <h2>Add New Plant</h2>
 
       <input
@@ -80,7 +79,15 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
         value={form.name}
         onChange={handleChange}
       />
-      <select name='category' value={form.category} onChange={handleChange}>
+      <select
+        multiple
+        value={selectedCategories}
+        onChange={(e) =>
+          setSelectedCategories(
+            Array.from(e.target.selectedOptions, (option) => option.value),
+          )
+        }
+      >
         <option value=''>Select Category</option>
         {categories.map((category) => (
           <option key={category._id} value={category._id}>

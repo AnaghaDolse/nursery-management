@@ -1,22 +1,38 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchPlants } from '../features/plants/plantSlice'
 import { deletePlant } from '../features/plants/plantSlice'
+import { fetchCategories } from '../features/categories/categorySlice'
 
 const PlantList = ({ setEditingPlant }) => {
   const dispatch = useDispatch()
   const { data, loading, error } = useSelector((state) => state.plants)
+  const { data: categories } = useSelector((state) => state.categories)
+  const [search, setSearch] = useState('')
+  const [selectedCategories, setSelectedCategories] = useState([])
 
   useEffect(() => {
     dispatch(fetchPlants())
+    dispatch(fetchCategories())
   }, [dispatch])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
 
+  const filteredPlants = data.filter((plant) =>
+    plant.name.toLowerCase().includes(search.toLowerCase()),
+  )
+
   return (
     <div>
       <h2>Plant List</h2>
+      <input
+        type='text'
+        placeholder='Search plants...'
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      
       <table border='1'>
         <thead>
           <tr>
@@ -30,7 +46,7 @@ const PlantList = ({ setEditingPlant }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((plant) => (
+          {filteredPlants.map((plant) => (
             <tr key={plant._id}>
               <td>{plant.name}</td>
               <td>{plant.category?.name}</td>

@@ -12,9 +12,13 @@ export const getPlants = async (req, res) => {
 
 // Add new plant
 export const addPlant = async (req, res) => {
-  const { name, category, price, stock, description } = req.body
+  const { name, price, stock, description } = req.body
+
+  //parse category array
+  const category = JSON.parse(req.body.category) ? JSON.parse(req.body.category) : []
 
   const image = req.file ? `/uploads/${req.file.filename}` : null
+
   try {
     const newPlant = new Plant({
       name,
@@ -28,6 +32,7 @@ export const addPlant = async (req, res) => {
     await newPlant.save()
     res.status(201).json(newPlant)
   } catch (error) {
+    console.log(error)
     res.status(400).json({ message: error.message })
   }
 }
@@ -36,14 +41,17 @@ export const addPlant = async (req, res) => {
 export const updatePlant = async (req, res) => {
   try {
     const { id } = req.params
-    const { name, category, price, stock, description } = req.body
+    const { name, price, stock, description } = req.body
 
     const updatedData = {
       name,
-      category,
       price,
       stock,
       description,
+    }
+
+    if (req.body.category) {
+      updatedData.category = JSON.parse(req.body.category)
     }
 
     if (req.file) {
