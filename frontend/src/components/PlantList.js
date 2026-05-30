@@ -32,7 +32,7 @@ const PlantList = ({ setEditingPlant }) => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      
+
       <table border='1'>
         <thead>
           <tr>
@@ -49,7 +49,13 @@ const PlantList = ({ setEditingPlant }) => {
           {filteredPlants.map((plant) => (
             <tr key={plant._id}>
               <td>{plant.name}</td>
-              <td>{plant.category?.name}</td>
+              <td>
+                {plant.category?.map((cat) => (
+                  <span key={cat._id} className='category-tag'>
+                    {cat.name}
+                  </span>
+                ))}
+              </td>
               <td>{plant.price}</td>
               <td>{plant.stock}</td>
               <td>{plant.description}</td>
