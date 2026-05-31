@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addPlant, updatePlant } from '../features/plants/plantSlice'
+import {
+  addPlant,
+  updatePlant,
+  fetchPlants,
+} from '../features/plants/plantSlice'
 import { fetchCategories } from '../features/categories/categorySlice'
+import { toast } from 'react-toastify'
 
 const AddPlant = ({ editingPlant, setEditingPlant }) => {
   const dispatch = useDispatch()
@@ -61,10 +66,18 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
           id: editingPlant._id,
           updatedData: formData,
         }),
-      )
+      ).then(() => {
+        dispatch(fetchPlants()) // ✅ refetch after update
+      })
+
+      toast.success('Plant updated successfully 🌱')
       setEditingPlant(null)
     } else {
-      dispatch(addPlant(formData))
+      dispatch(addPlant(formData)).then(() => {
+        dispatch(fetchPlants()) // ✅ refetch after add
+      })
+
+      toast.success('Plant added successfully 🌿')
     }
   }
 

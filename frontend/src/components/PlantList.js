@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchPlants } from '../features/plants/plantSlice'
 import { deletePlant } from '../features/plants/plantSlice'
 import { fetchCategories } from '../features/categories/categorySlice'
+import {toast} from 'react-toastify'
 
 const PlantList = ({ setEditingPlant }) => {
   const dispatch = useDispatch()
@@ -19,19 +20,65 @@ const PlantList = ({ setEditingPlant }) => {
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
 
-  const filteredPlants = data.filter((plant) =>
-    plant.name.toLowerCase().includes(search.toLowerCase()),
-  )
+  const filteredPlants = data.filter((plant) => {
+    const matchesSearch = plant.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
+
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      plant.category.some((cat) => selectedCategories.includes(cat._id))
+
+    return matchesSearch && matchesCategory
+  })
 
   return (
     <div>
       <h2>Plant List</h2>
-      <input
-        type='text'
-        placeholder='Search plants...'
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className='filter-container'>
+        <div classNme='filter-top'>
+          <input
+            type='text'
+            placeholder='Search plants...'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button
+            onClick={() => {
+              setSelectedCategories([])
+              setSearch('')
+            }}
+          >
+            Reset All
+          </button>
+        </div>
+
+        <div className='checkbox-group'>
+          <h4>Filter by Category:</h4>
+          {categories.map((cat) => (
+            <label key={cat._id} style={{ marginRight: '10px' }}>
+              <input
+                type='checkbox'
+                value={cat._id}
+              checked={selectedCategories.includes(cat._id)}
+              onChange={(e) => {
+                const value = e.target.value
+
+                if (e.target.checked) {
+                  setSelectedCategories([...selectedCategories, value])
+                } else {
+                  setSelectedCategories(
+                    selectedCategories.filter((id) => id !== value),
+                  )
+                }
+              }}
+            />
+            {cat.name}
+          </label>
+        ))}</div>
+        <button onClick={() => setSelectedCategories([])}>Clear Filters</button>
+        <p>Active Filters: {selectedCategories.length} selected</p>
+      </div>
 
       <table border='1'>
         <thead>
@@ -72,7 +119,10 @@ const PlantList = ({ setEditingPlant }) => {
                 </button>
                 <button
                   className='delete'
-                  onClick={() => dispatch(deletePlant(plant._id))}
+                  onClick={() => {
+                    dispatch(deletePlant(plant._id))
+                    toast.success('Plant deleted successfully!')
+                  }}
                 >
                   Delete
                 </button>

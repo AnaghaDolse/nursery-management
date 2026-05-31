@@ -60,7 +60,7 @@ const plantSlice = createSlice({
         state.error = action.error.message
       })
       .addCase(addPlant.fulfilled, (state, action) => {
-        state.data.push(action.payload)
+        // state.data.push(action.payload)
       })
       .addCase(deletePlant.fulfilled, (state, action) => {
         state.data = state.data.filter((plant) => plant._id !== action.payload)
