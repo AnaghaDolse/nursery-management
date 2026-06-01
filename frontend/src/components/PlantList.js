@@ -133,7 +133,7 @@ const PlantList = ({ setEditingPlant }) => {
                     )
                     if (confirmDelete) {
                       dispatch(deletePlant(plant._id)).then(() => {
-                        dispatch(fetchPlants())
+                        dispatch(fetchPlants({ page: currentPage, limit: 5 }))
                         toast.success('Plant deleted successfully!')
                       })
                     }
@@ -148,15 +148,15 @@ const PlantList = ({ setEditingPlant }) => {
       </table>
       <div style={{ marginTop: '20px' }}>
         <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
+          disabled={loading || currentPage === 1}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
         >
-          Previous
+          Prev
         </button>
         <span style={{ margin: '0 10px' }}>Page {currentPage}</span>
         <button
+          disabled={loading || currentPage >= pages}
           onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === pages}
         >
           Next
         </button>

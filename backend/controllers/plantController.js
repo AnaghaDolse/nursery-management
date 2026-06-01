@@ -3,21 +3,23 @@ import Plant from '../models/Plant.js'
 // Get all plants
 export const getPlants = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1
+    let page = parseInt(req.query.page)
+    if (!page || page < 1) page = 1
+
     const limit = parseInt(req.query.limit) || 5
 
     const skip = (page - 1) * limit
 
-    const total = await Plant.countDocuments
+    const total = await Plant.countDocuments()
+
+    const pages = Math.ceil(total / limit)
 
     const plants = await Plant.find()
       .populate('category')
       .skip(skip)
       .limit(limit)
 
-    res
-      .status(200)
-      .json({ plants, total, page, pages: Math.ceil(total / limit) })
+    res.status(200).json({ plants, total, page, pages })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

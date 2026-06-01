@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 const AddPlant = ({ editingPlant, setEditingPlant }) => {
   const dispatch = useDispatch()
   const { data: categories } = useSelector((state) => state.categories)
+  const { pages } = useSelector((state) => state.plants)
   const [form, setForm] = useState({
     name: '',
     price: '',
@@ -20,9 +21,7 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [image, setImage] = useState(null)
 
-  useEffect(() => {
-    dispatch(fetchCategories())
-  }, [dispatch])
+
 
   useEffect(() => {
     if (editingPlant) {
@@ -67,14 +66,14 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
           updatedData: formData,
         }),
       ).then(() => {
-        dispatch(fetchPlants()) // ✅ refetch after update
+        dispatch(fetchPlants({ page: 1, limit: 5 })) // ✅ refetch after update
       })
 
       toast.success('Plant updated successfully 🌱')
       setEditingPlant(null)
     } else {
       dispatch(addPlant(formData)).then(() => {
-        dispatch(fetchPlants()) // ✅ refetch after add
+        dispatch(fetchPlants({ page: 1, limit: 5 })) // ✅ refetch after add
       })
 
       toast.success('Plant added successfully 🌿')

@@ -62,8 +62,9 @@ const plantSlice = createSlice({
       .addCase(fetchPlants.fulfilled, (state, action) => {
         state.loading = false
         state.data = action.payload.plants
-        state.page = action.payload.pages
+        state.page = action.payload.page
         state.pages = action.payload.pages
+        state.total = action.payload.total
       })
       .addCase(fetchPlants.rejected, (state, action) => {
         state.loading = false
@@ -73,7 +74,7 @@ const plantSlice = createSlice({
         // state.data.push(action.payload)
       })
       .addCase(deletePlant.fulfilled, (state, action) => {
-        state.data = state.data.filter((plant) => plant._id !== action.payload)
+        state.data = state.data.filter((plant) => plant._id !== action.meta.arg)
       })
   },
 })
