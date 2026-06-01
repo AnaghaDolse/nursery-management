@@ -1,10 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-export const fetchPlants = createAsyncThunk('plants/fetchPlants', async () => {
-  const response = await axios.get('http://localhost:5000/api/plants')
-  return response.data
-})
+export const fetchPlants = createAsyncThunk(
+  'plants/fetchPlants',
+  async ({ page = 1, limit = 5 }) => {
+    const response = await axios.get(
+      `http://localhost:5000/api/plants?page=${page}&limit=${limit}`,
+    )
+    return response.data
+  },
+)
 
 export const addPlant = createAsyncThunk(
   'plants/addPlant',
@@ -28,7 +33,7 @@ export const updatePlant = createAsyncThunk(
     )
     return response.data
   },
-)  
+)
 
 export const deletePlant = createAsyncThunk(
   'plants/deletePlant',
@@ -44,6 +49,9 @@ const plantSlice = createSlice({
     data: [],
     loading: false,
     error: null,
+    page: 1,
+    pages: 1,
+    total: 0,
   },
   extraReducers: (builder) => {
     builder
@@ -53,7 +61,9 @@ const plantSlice = createSlice({
       })
       .addCase(fetchPlants.fulfilled, (state, action) => {
         state.loading = false
-        state.data = action.payload
+        state.data = action.payload.plants
+        state.page = action.payload.pages
+        state.pages = action.payload.pages
       })
       .addCase(fetchPlants.rejected, (state, action) => {
         state.loading = false

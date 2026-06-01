@@ -3,8 +3,21 @@ import Plant from '../models/Plant.js'
 // Get all plants
 export const getPlants = async (req, res) => {
   try {
-    const plants = await Plant.find().populate('category')
-    res.status(200).json(plants)
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 5
+
+    const skip = (page - 1) * limit
+
+    const total = await Plant.countDocuments
+
+    const plants = await Plant.find()
+      .populate('category')
+      .skip(skip)
+      .limit(limit)
+
+    res
+      .status(200)
+      .json({ plants, total, page, pages: Math.ceil(total / limit) })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -15,7 +28,9 @@ export const addPlant = async (req, res) => {
   const { name, price, stock, description } = req.body
 
   //parse category array
-  const category = JSON.parse(req.body.category) ? JSON.parse(req.body.category) : []
+  const category = JSON.parse(req.body.category)
+    ? JSON.parse(req.body.category)
+    : []
 
   const image = req.file ? `/uploads/${req.file.filename}` : null
 
