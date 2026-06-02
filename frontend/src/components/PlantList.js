@@ -7,11 +7,22 @@ import { toast } from 'react-toastify'
 
 const PlantList = ({ setEditingPlant }) => {
   const dispatch = useDispatch()
-  const { data, loading, error, pages } = useSelector((state) => state.plants)
+  const { data, loading, error, pages, total } = useSelector(
+    (state) => state.plants,
+  )
+  const pageNumbers = []
+  for (let i = 1; i <= pages; i++) {
+    pageNumbers.push(i)
+  }
   const { data: categories } = useSelector((state) => state.categories)
   const [search, setSearch] = useState('')
+  const [debounceSearch, setDebounceSearch] = useState('')
   const [selectedCategories, setSelectedCategories] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+
+  const limit = 5
+  const start = (currentPage - 1) * limit + 1
+  const end = Math.min(currentPage * limit, total)
 
   useEffect(() => {
     dispatch(fetchPlants({ page: currentPage, limit: 5 }))
@@ -24,13 +35,21 @@ const PlantList = ({ setEditingPlant }) => {
     }
   }, [pages])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebounceSearch(search)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [search])
+
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
 
   const filteredPlants = (data || []).filter((plant) => {
     const matchesSearch = plant.name
       .toLowerCase()
-      .includes(search.toLowerCase())
+      .includes(debounceSearch.toLowerCase())
 
     const matchesCategory =
       selectedCategories.length === 0 ||
@@ -87,7 +106,9 @@ const PlantList = ({ setEditingPlant }) => {
         <button onClick={() => setSelectedCategories([])}>Clear Filters</button>
         <p>Active Filters: {selectedCategories.length} selected</p>
       </div>
-
+      <p>
+        Showing {start} to {end} of {total} results
+      </p>
       <table border='1'>
         <thead>
           <tr>
@@ -146,17 +167,25 @@ const PlantList = ({ setEditingPlant }) => {
           ))}
         </tbody>
       </table>
-      <div style={{ marginTop: '20px' }}>
+      <div className='pagination'>
         <button
-          disabled={loading || currentPage === 1}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={loading || currentPage === 1}
         >
           Prev
         </button>
-        <span style={{ margin: '0 10px' }}>Page {currentPage}</span>
+        {pageNumbers.map((num) => (
+          <button
+            key={num}
+            onClick={() => setCurrentPage(num)}
+            style={{ fontWeight: currentPage === num ? 'bold' : 'normal' }}
+          >
+            {num}
+          </button>
+        ))}
         <button
-          disabled={loading || currentPage >= pages}
-          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={loading || currentPage === pages}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, pages))}
         >
           Next
         </button>
