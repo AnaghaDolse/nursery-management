@@ -18,6 +18,8 @@ const PlantList = ({ setEditingPlant }) => {
   const [search, setSearch] = useState('')
   const [debounceSearch, setDebounceSearch] = useState('')
   const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedPlants, setSelectedPlants] = useState([])
+  const [sortOptions, setSortOptions] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
 
   const limit = 5
@@ -56,6 +58,13 @@ const PlantList = ({ setEditingPlant }) => {
       plant.category.some((cat) => selectedCategories.includes(cat._id))
 
     return matchesSearch && matchesCategory
+  })
+
+  const sortedPlants = [...filteredPlants].sort((a, b) => {
+    if (sortOptions === 'price-asc') return a.price - b.price
+    if (sortOptions === 'price-desc') return b.price - a.price
+    if (sortOptions === 'stock-asc') return a.stock - b.stock
+    if (sortOptions === 'stock-desc') return b.stock - a.stock
   })
 
   return (
@@ -109,10 +118,38 @@ const PlantList = ({ setEditingPlant }) => {
       <p>
         Showing {start} to {end} of {total} results
       </p>
+      <select onChange={(e) => setSortOptions(e.target.value)}>
+        <option value=''>Sort By</option>
+        <option value='price-asc'>Price: Low to High</option>
+        <option value='price-desc'>Price: High to Low</option>
+        <option value='stock-asc'>Stocks: Low to High</option>
+        <option value='stock-desc'>Stocks: High to Low</option>
+      </select>
+      <button
+        className='delete'
+        disabled={selectedPlants.length === 0}
+        onClick={() => {
+          const confirmDelete = window.confirm(
+            'Are you sure you want to delete selected plants?',
+          )
+
+          if (confirmDelete) {
+            Promise.all(
+              selectedPlants.map((id) => dispatch(deletePlant(id))),
+            ).then(() => {
+              dispatch(fetchPlants({ page: currentPage, limit: 5 }))
+              toast.success('Selected plants deleted successfully!')
+              setSelectedPlants([])
+            })
+          }
+        }}
+      >
+        Delete Selected
+      </button>
       <table border='1'>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Select</th> <th>Name</th>
             <th>Category</th>
             <th>Price</th>
             <th>Stock</th>
@@ -122,8 +159,23 @@ const PlantList = ({ setEditingPlant }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredPlants.map((plant) => (
+          {sortedPlants.map((plant) => (
             <tr key={plant._id}>
+              <td>
+                <input
+                  type='checkbox'
+                  checked={selectedPlants.includes(plant._id)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedPlants([...selectedPlants, plant._id])
+                    } else {
+                      setSelectedPlants(
+                        selectedPlants.filter((id) => id !== plant._id),
+                      )
+                    }
+                  }}
+                />
+              </td>
               <td>{plant.name}</td>
               <td>
                 {plant.category?.map((cat) => (
