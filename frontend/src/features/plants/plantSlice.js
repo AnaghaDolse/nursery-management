@@ -3,9 +3,18 @@ import axios from 'axios'
 
 export const fetchPlants = createAsyncThunk(
   'plants/fetchPlants',
-  async ({ page = 1, limit = 5 }) => {
+  async ({ page = 1, limit = 5, search, selectedCategories }) => {
+    const params = new URLSearchParams({})
+
+    if (page) params.append('page', page)
+    if (limit) params.append('limit', limit)
+    if (search) params.append('search', search)
+    if (selectedCategories && selectedCategories.length > 0) {
+      params.append('category', selectedCategories.join(','))
+    }
+
     const response = await axios.get(
-      `http://localhost:5000/api/plants?page=${page}&limit=${limit}`,
+      `http://localhost:5000/api/plants?${params.toString()}`,
     )
     return response.data
   },

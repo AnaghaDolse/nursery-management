@@ -27,15 +27,26 @@ const PlantList = ({ setEditingPlant }) => {
   const end = Math.min(currentPage * limit, total)
 
   useEffect(() => {
-    dispatch(fetchPlants({ page: currentPage, limit: 5 }))
+    dispatch(
+      fetchPlants({
+        page: currentPage,
+        limit: 5,
+        search: debounceSearch,
+        selectedCategories,
+      }),
+    )
     dispatch(fetchCategories())
-  }, [dispatch, currentPage])
+  }, [dispatch, currentPage, debounceSearch, selectedCategories])
 
   useEffect(() => {
     if (currentPage > pages) {
       setCurrentPage(pages)
     }
   }, [pages])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [debounceSearch, selectedCategories])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,19 +59,7 @@ const PlantList = ({ setEditingPlant }) => {
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
 
-  const filteredPlants = (data || []).filter((plant) => {
-    const matchesSearch = plant.name
-      .toLowerCase()
-      .includes(debounceSearch.toLowerCase())
-
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      plant.category.some((cat) => selectedCategories.includes(cat._id))
-
-    return matchesSearch && matchesCategory
-  })
-
-  const sortedPlants = [...filteredPlants].sort((a, b) => {
+  const sortedPlants = [...(data || [])].sort((a, b) => {
     if (sortOptions === 'price-asc') return a.price - b.price
     if (sortOptions === 'price-desc') return b.price - a.price
     if (sortOptions === 'stock-asc') return a.stock - b.stock
@@ -137,7 +136,14 @@ const PlantList = ({ setEditingPlant }) => {
             Promise.all(
               selectedPlants.map((id) => dispatch(deletePlant(id))),
             ).then(() => {
-              dispatch(fetchPlants({ page: currentPage, limit: 5 }))
+              dispatch(
+                fetchPlants({
+                  page: currentPage,
+                  limit: 5,
+                  search: debounceSearch,
+                  selectedCategories,
+                }),
+              )
               toast.success('Selected plants deleted successfully!')
               setSelectedPlants([])
             })
@@ -206,7 +212,7 @@ const PlantList = ({ setEditingPlant }) => {
                     )
                     if (confirmDelete) {
                       dispatch(deletePlant(plant._id)).then(() => {
-                        dispatch(fetchPlants({ page: currentPage, limit: 5 }))
+                        dispatch(fetchPlants({ page: currentPage, limit: 5, search: debounceSearch, selectedCategories }))
                         toast.success('Plant deleted successfully!')
                       })
                     }

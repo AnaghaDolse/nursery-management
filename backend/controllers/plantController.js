@@ -10,11 +10,22 @@ export const getPlants = async (req, res) => {
 
     const skip = (page - 1) * limit
 
-    const total = await Plant.countDocuments()
+    const search = req.query.search || ''
+    const category = req.query.category || ''
+    let query = {}
+    if (search) {
+      query.name = { $regex: search, $options: 'i' }
+    }
+
+    if (category) {
+      query.category = category
+    }
+
+    const total = await Plant.countDocuments(query)
 
     const pages = Math.ceil(total / limit)
 
-    const plants = await Plant.find()
+    const plants = await Plant.find(query)
       .populate('category')
       .skip(skip)
       .limit(limit)
