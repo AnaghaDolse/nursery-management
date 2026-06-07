@@ -56,7 +56,17 @@ const PlantList = ({ setEditingPlant }) => {
     return () => clearTimeout(timer)
   }, [search])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) {
+    return (
+      <div>
+        <h2>Plant List</h2>
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className='skeleton-row'></div>
+        ))}
+      </div>
+    )
+  }
+
   if (error) return <p>Error: {error}</p>
 
   const sortedPlants = [...(data || [])].sort((a, b) => {
@@ -212,7 +222,14 @@ const PlantList = ({ setEditingPlant }) => {
                     )
                     if (confirmDelete) {
                       dispatch(deletePlant(plant._id)).then(() => {
-                        dispatch(fetchPlants({ page: currentPage, limit: 5, search: debounceSearch, selectedCategories }))
+                        dispatch(
+                          fetchPlants({
+                            page: currentPage,
+                            limit: 5,
+                            search: debounceSearch,
+                            selectedCategories,
+                          }),
+                        )
                         toast.success('Plant deleted successfully!')
                       })
                     }
