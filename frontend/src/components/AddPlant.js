@@ -9,6 +9,7 @@ import { fetchCategories } from '../features/categories/categorySlice'
 import { toast } from 'react-toastify'
 
 const AddPlant = ({ editingPlant, setEditingPlant }) => {
+  const user = JSON.parse(localStorage.getItem('user'))
   const dispatch = useDispatch()
   const { data: categories } = useSelector((state) => state.categories)
   const { pages } = useSelector((state) => state.plants)
@@ -20,8 +21,6 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
   })
   const [selectedCategories, setSelectedCategories] = useState([])
   const [image, setImage] = useState(null)
-
-
 
   useEffect(() => {
     if (editingPlant) {
@@ -78,6 +77,10 @@ const AddPlant = ({ editingPlant, setEditingPlant }) => {
 
       toast.success('Plant added successfully 🌿')
     }
+  }
+
+  if (!user || user.role !== 'admin') {
+    return <p>Access denied. Only admins can add or edit plants.</p>
   }
 
   return (

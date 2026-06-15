@@ -6,6 +6,7 @@ import { fetchCategories } from '../features/categories/categorySlice'
 import { toast } from 'react-toastify'
 
 const PlantList = ({ setEditingPlant }) => {
+  const user = JSON.parse(localStorage.getItem('user'))
   const dispatch = useDispatch()
   const { data, loading, error, pages, total } = useSelector(
     (state) => state.plants,
@@ -134,34 +135,36 @@ const PlantList = ({ setEditingPlant }) => {
         <option value='stock-asc'>Stocks: Low to High</option>
         <option value='stock-desc'>Stocks: High to Low</option>
       </select>
-      <button
-        className='delete'
-        disabled={selectedPlants.length === 0}
-        onClick={() => {
-          const confirmDelete = window.confirm(
-            'Are you sure you want to delete selected plants?',
-          )
+      {user?.role === 'admin' && (
+        <button
+          className='delete'
+          disabled={selectedPlants.length === 0}
+          onClick={() => {
+            const confirmDelete = window.confirm(
+              'Are you sure you want to delete selected plants?',
+            )
 
-          if (confirmDelete) {
-            Promise.all(
-              selectedPlants.map((id) => dispatch(deletePlant(id))),
-            ).then(() => {
-              dispatch(
-                fetchPlants({
-                  page: currentPage,
-                  limit: 5,
-                  search: debounceSearch,
-                  selectedCategories,
-                }),
-              )
-              toast.success('Selected plants deleted successfully!')
-              setSelectedPlants([])
-            })
-          }
-        }}
-      >
-        Delete Selected
-      </button>
+            if (confirmDelete) {
+              Promise.all(
+                selectedPlants.map((id) => dispatch(deletePlant(id))),
+              ).then(() => {
+                dispatch(
+                  fetchPlants({
+                    page: currentPage,
+                    limit: 5,
+                    search: debounceSearch,
+                    selectedCategories,
+                  }),
+                )
+                toast.success('Selected plants deleted successfully!')
+                setSelectedPlants([])
+              })
+            }
+          }}
+        >
+          Delete Selected
+        </button>
+      )}
       <table border='1'>
         <thead>
           <tr>
@@ -211,32 +214,39 @@ const PlantList = ({ setEditingPlant }) => {
                 />
               </td>
               <td>
-                <button className='edit' onClick={() => setEditingPlant(plant)}>
-                  Edit
-                </button>
-                <button
-                  className='delete'
-                  onClick={() => {
-                    const confirmDelete = window.confirm(
-                      'Are you sure you want to delete this plant?',
-                    )
-                    if (confirmDelete) {
-                      dispatch(deletePlant(plant._id)).then(() => {
-                        dispatch(
-                          fetchPlants({
-                            page: currentPage,
-                            limit: 5,
-                            search: debounceSearch,
-                            selectedCategories,
-                          }),
+                {user?.role === 'admin' && (
+                  <>
+                    <button
+                      className='edit'
+                      onClick={() => setEditingPlant(plant)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className='delete'
+                      onClick={() => {
+                        const confirmDelete = window.confirm(
+                          'Are you sure you want to delete this plant?',
                         )
-                        toast.success('Plant deleted successfully!')
-                      })
-                    }
-                  }}
-                >
-                  Delete
-                </button>
+                        if (confirmDelete) {
+                          dispatch(deletePlant(plant._id)).then(() => {
+                            dispatch(
+                              fetchPlants({
+                                page: currentPage,
+                                limit: 5,
+                                search: debounceSearch,
+                                selectedCategories,
+                              }),
+                            )
+                            toast.success('Plant deleted successfully!')
+                          })
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
@@ -265,6 +275,15 @@ const PlantList = ({ setEditingPlant }) => {
           Next
         </button>
       </div>
+      <button
+        onClick={() => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          window.location.reload()
+        }}
+      >
+        Logout
+      </button>
     </div>
   )
 }

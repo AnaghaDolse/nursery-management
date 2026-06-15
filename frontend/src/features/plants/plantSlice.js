@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+const token = localStorage.getItem('token')
+
 export const fetchPlants = createAsyncThunk(
   'plants/fetchPlants',
   async ({ page = 1, limit = 5, search, selectedCategories }) => {
@@ -14,7 +16,11 @@ export const fetchPlants = createAsyncThunk(
     }
 
     const response = await axios.get(
-      `http://localhost:5000/api/plants?${params.toString()}`,
+      `http://localhost:5000/api/plants?${params.toString()}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
     return response.data
   },
@@ -26,7 +32,7 @@ export const addPlant = createAsyncThunk(
     const response = await axios.post(
       'http://localhost:5000/api/plants',
       plantData,
-      { headers: { 'Content-Type': 'multipart/form-data' } },
+      { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` } },
     )
     return response.data
   },
@@ -38,7 +44,7 @@ export const updatePlant = createAsyncThunk(
     const response = await axios.put(
       `http://localhost:5000/api/plants/${id}`,
       updatedData,
-      { headers: { 'Content-Type': 'multipart/form-data' } },
+      { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` } },
     )
     return response.data
   },
@@ -47,7 +53,9 @@ export const updatePlant = createAsyncThunk(
 export const deletePlant = createAsyncThunk(
   'plants/deletePlant',
   async (id) => {
-    await axios.delete(`http://localhost:5000/api/plants/${id}`)
+    await axios.delete(`http://localhost:5000/api/plants/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
     return id
   },
 )
