@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -22,7 +24,7 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
 
       alert('Login successful')
-      window.location.href = '/'
+      navigate('/add-plant')
     } catch (error) {
       alert(error.response?.data?.message || 'Login failed')
     }

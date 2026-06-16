@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import Login from './pages/Login.js'
+import ProtectedRoute from './components/ProtectedRoute.js'
 import AddPlant from './components/AddPlant'
 import PlantList from './components/PlantList'
 import { ToastContainer } from 'react-toastify'
@@ -9,10 +11,6 @@ import 'react-toastify/dist/ReactToastify.css'
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
 
-  const token = localStorage.getItem('token')
-  if (!token) {
-    return <Login />
-  }
   return (
     <Router>
       <div className='container'>
@@ -20,13 +18,22 @@ function App() {
 
         <Routes>
           {/*Login Route*/}
-          <Route path='/login' element={<Login />} />
+          <Route
+            path='/'
+            element={
+              localStorage.getItem('token') ? (
+                <Navigate to='/add-plant' />
+              ) : (
+                <Login />
+              )
+            }
+          />
 
           {/*Protected Routes*/}
           <Route
             path='/add-plant'
             element={
-              token ? (
+              <ProtectedRoute>
                 <>
                   <AddPlant
                     editingPlant={editingPlant}
@@ -34,9 +41,7 @@ function App() {
                   />
                   <PlantList setEditingPlant={setEditingPlant} />
                 </>
-              ) : (
-                <Login />
-              )
+              </ProtectedRoute>
             }
           />
         </Routes>

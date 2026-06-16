@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { fetchPlants } from '../features/plants/plantSlice'
 import { deletePlant } from '../features/plants/plantSlice'
 import { fetchCategories } from '../features/categories/categorySlice'
@@ -7,6 +8,7 @@ import { toast } from 'react-toastify'
 
 const PlantList = ({ setEditingPlant }) => {
   const user = JSON.parse(localStorage.getItem('user'))
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { data, loading, error, pages, total } = useSelector(
     (state) => state.plants,
@@ -76,6 +78,12 @@ const PlantList = ({ setEditingPlant }) => {
     if (sortOptions === 'stock-asc') return a.stock - b.stock
     if (sortOptions === 'stock-desc') return b.stock - a.stock
   })
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    navigate('/')
+  }
 
   return (
     <div>
@@ -277,9 +285,7 @@ const PlantList = ({ setEditingPlant }) => {
       </div>
       <button
         onClick={() => {
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
-          window.location.reload()
+          handleLogout()
         }}
       >
         Logout
