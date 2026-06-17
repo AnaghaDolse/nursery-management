@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import API from '../../api/axios'
 
 const token = localStorage.getItem('token')
 
@@ -15,12 +15,13 @@ export const fetchPlants = createAsyncThunk(
       params.append('category', selectedCategories.join(','))
     }
 
-    const response = await axios.get(
-      `http://localhost:5000/api/plants?${params.toString()}`,{
+    const response = await API.get(
+      `http://localhost:5000/api/plants?${params.toString()}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     )
     return response.data
   },
@@ -29,10 +30,15 @@ export const fetchPlants = createAsyncThunk(
 export const addPlant = createAsyncThunk(
   'plants/addPlant',
   async (plantData) => {
-    const response = await axios.post(
+    const response = await API.post(
       'http://localhost:5000/api/plants',
       plantData,
-      { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` } },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      },
     )
     return response.data
   },
@@ -41,10 +47,15 @@ export const addPlant = createAsyncThunk(
 export const updatePlant = createAsyncThunk(
   'plants/updatePlant',
   async ({ id, updatedData }) => {
-    const response = await axios.put(
+    const response = await API.put(
       `http://localhost:5000/api/plants/${id}`,
       updatedData,
-      { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` } },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      },
     )
     return response.data
   },
@@ -53,7 +64,7 @@ export const updatePlant = createAsyncThunk(
 export const deletePlant = createAsyncThunk(
   'plants/deletePlant',
   async (id) => {
-    await axios.delete(`http://localhost:5000/api/plants/${id}`, {
+    await API.delete(`http://localhost:5000/api/plants/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     return id
