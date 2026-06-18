@@ -79,12 +79,6 @@ const PlantList = ({ setEditingPlant }) => {
     if (sortOptions === 'stock-desc') return b.stock - a.stock
   })
 
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    navigate('/')
-  }
-
   return (
     <div>
       <h2>Plant List</h2>
@@ -283,13 +277,6 @@ const PlantList = ({ setEditingPlant }) => {
           Next
         </button>
       </div>
-      <button
-        onClick={() => {
-          handleLogout()
-        }}
-      >
-        Logout
-      </button>
     </div>
   )
 }

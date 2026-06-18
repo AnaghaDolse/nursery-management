@@ -2,19 +2,24 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 import Login from './pages/Login.js'
+import Navbar from './components/Navbar.js'
 import ProtectedRoute from './components/ProtectedRoute.js'
 import AddPlant from './components/AddPlant'
 import PlantList from './components/PlantList'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useSelector } from 'react-redux'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
+  const { token } = useSelector((state) => state.auth) 
 
   return (
     <Router>
       <div className='container'>
         <h1>Welcome to Jhaad Ugao !</h1>
+
+        {token && <Navbar />}
 
         <Routes>
           {/*Login Route*/}

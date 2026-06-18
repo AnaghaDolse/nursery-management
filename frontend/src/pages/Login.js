@@ -23,8 +23,9 @@ const Login = () => {
       )
       dispatch(loginSuccess(response.data))
       alert('Login successful')
-      navigate('/')
+      navigate('/add-plant')
     } catch (error) {
+      console.log(error)
       alert(error.response?.data?.message || 'Login failed')
     }
   }
