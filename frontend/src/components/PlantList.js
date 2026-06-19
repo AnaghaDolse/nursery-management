@@ -24,6 +24,7 @@ const PlantList = ({ setEditingPlant }) => {
   const [selectedPlants, setSelectedPlants] = useState([])
   const [sortOptions, setSortOptions] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [deletingId, setDeletingId] = useState(null)
 
   const limit = 5
   const start = (currentPage - 1) * limit + 1
@@ -231,6 +232,8 @@ const PlantList = ({ setEditingPlant }) => {
                           'Are you sure you want to delete this plant?',
                         )
                         if (confirmDelete) {
+                          setDeletingId(plant._id)
+
                           dispatch(deletePlant(plant._id)).then(() => {
                             dispatch(
                               fetchPlants({
@@ -241,11 +244,13 @@ const PlantList = ({ setEditingPlant }) => {
                               }),
                             )
                             toast.success('Plant deleted successfully!')
+                            setDeletingId(null)
                           })
                         }
                       }}
+                      disabled={deletingId === plant._id}
                     >
-                      Delete
+                      {deletingId === plant._id ? 'Deleting...' : 'Delete'}
                     </button>
                   </>
                 )}

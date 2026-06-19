@@ -9,10 +9,11 @@ import PlantList from './components/PlantList'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useSelector } from 'react-redux'
+import UserPlantGrid from './components/UserPlantGrid.js'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
-  const { token } = useSelector((state) => state.auth) 
+  const { token, user } = useSelector((state) => state.auth)
 
   return (
     <Router>
@@ -44,7 +45,11 @@ function App() {
                     editingPlant={editingPlant}
                     setEditingPlant={setEditingPlant}
                   />
-                  <PlantList setEditingPlant={setEditingPlant} />
+                  {user?.role === 'admin' ? (
+                    <PlantList setEditingPlant={setEditingPlant} />
+                  ) : (
+                    <UserPlantGrid />
+                  )}
                 </>
               </ProtectedRoute>
             }
