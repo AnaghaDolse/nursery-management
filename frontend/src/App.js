@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useSelector } from 'react-redux'
 import UserPlantGrid from './components/UserPlantGrid.js'
+import PlantDetails from './pages/PlantDetails.js'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
@@ -51,6 +52,14 @@ function App() {
                     <UserPlantGrid />
                   )}
                 </>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/plant/:id'
+            element={
+              <ProtectedRoute>
+                <PlantDetails />
               </ProtectedRoute>
             }
           />

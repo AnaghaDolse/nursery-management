@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom'
+
 const PlantCard = ({ plant }) => {
+  const navigate = useNavigate()
+
   return (
     <div className='plant-card'>
       <img src={`http://localhost:5000${plant.image}`} alt={plant.name} />
@@ -11,7 +15,7 @@ const PlantCard = ({ plant }) => {
 
       <div className='actions'>
         <button>❤</button>
-        <button>View</button>
+        <button onClick={() => navigate(`/plant/${plant._id}`)}>View</button>
       </div>
     </div>
   )

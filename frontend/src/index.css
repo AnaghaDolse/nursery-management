@@ -227,6 +227,18 @@ input[type='checkbox'] {
   justify-content: space-around;
 }
 
+.details {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.details img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
 @keyframes loading {
   0% {
     background-position: 200% 0;
