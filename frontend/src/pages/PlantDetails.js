@@ -1,35 +1,37 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { fetchPlantById } from '../features/plants/plantSlice'
 
 const PlantDetails = () => {
- const { id } = useParams()
- const[plant, setPlant] = useState(null)
+  const { id } = useParams()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
- useEffect(() => {
-  const fetchPlant = async () => {
-   try {
-    const res = await axios.get(`http://localhost:5000/api//plants/${id}`)
-    setPlant(res.data)
-   } catch (error) {
-    console.error(error)
-   }
-  }
-  fetchPlant()
- },[id])
+  const { selectedPlant, loading } = useSelector((state) => state.plants)
 
- if (!plant) return <p>Loading...</p>
+  useEffect(() => {
+    dispatch(fetchPlantById(id))
+  }, [dispatch, id])
+
+  if (loading) return <p>Loading...</p>
+
+  if (!selectedPlant) return <p>Plant Not Found</p>
 
   return (
-    <div className="details">
-    <img src={`http://localhost:5000${plant.image}`} alt={plant.name} />
+    <div className='details'>
+      <button onClick={() => navigate(-1)}>⬅ Back</button>
 
-    <h2>{plant.name}</h2>
+      <img
+        src={`http://localhost:5000${selectedPlant.image}`}
+        alt={selectedPlant.name}
+      />
 
-    <p><strong>Category:</strong>{plant.category?.map(c =>c.name).join(',')}</p>
-    <p><strong>Price:</strong>₹{plant.price}</p>
-    <p><strong>Stock:</strong>{plant.stock}</p>
-    <p>{plant.description}</p>
+      <h2>{selectedPlant.name}</h2>
+
+      <p>{selectedPlant.category?.map((c) => c.name).join(',')}</p>
+      <p>₹{selectedPlant.price}</p>
+      <p>{selectedPlant.description}</p>
     </div>
   )
 }

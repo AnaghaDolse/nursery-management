@@ -44,6 +44,14 @@ export const addPlant = createAsyncThunk(
   },
 )
 
+export const fetchPlantById = createAsyncThunk(
+  'plants/fetchPlantById',
+  async (id) => {
+    const res = await API.get('/plants/${id}')
+    return res.data
+  },
+)
+
 export const updatePlant = createAsyncThunk(
   'plants/updatePlant',
   async ({ id, updatedData }) => {
@@ -97,6 +105,16 @@ const plantSlice = createSlice({
       .addCase(fetchPlants.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message
+      })
+      .addCase(fetchPlantById.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchPlantById.fulfilled, (state, action) => {
+        state.loading = false
+        state.selectedPlant = action.payload
+      })
+      .addCase(fetchPlantById.rejected, (state) => {
+        state.loading = false
       })
       .addCase(addPlant.fulfilled, (state, action) => {
         // state.data.push(action.payload)

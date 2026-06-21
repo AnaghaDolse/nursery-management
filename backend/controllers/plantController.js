@@ -36,6 +36,21 @@ export const getPlants = async (req, res) => {
   }
 }
 
+//Get plants by ID
+export const getPlantById = async (req, res) => {
+  try {
+    const plant = await Plant.findById(req.params.id).populate('category')
+
+    if (!plant) {
+      return res.status(404).json({ message: 'Plant not found' })
+    }
+
+    res.status(200).json(plant)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 // Add new plant
 export const addPlant = async (req, res) => {
   const { name, price, stock, description } = req.body
