@@ -47,7 +47,7 @@ export const addPlant = createAsyncThunk(
 export const fetchPlantById = createAsyncThunk(
   'plants/fetchPlantById',
   async (id) => {
-    const res = await API.get('/plants/${id}')
+    const res = await API.get(`/${id}`)
     return res.data
   },
 )

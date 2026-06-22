@@ -56,7 +56,7 @@ function App() {
             }
           />
           <Route
-            path='/plant/:id'
+            path='/:id'
             element={
               <ProtectedRoute>
                 <PlantDetails />
