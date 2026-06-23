@@ -15,7 +15,7 @@ const PlantCard = ({ plant }) => {
 
       <div className='actions'>
         <button>❤</button>
-        <button onClick={() => navigate(`/${plant._id}`)}>View</button>
+        <button onClick={() => navigate(`/plant/${plant._id}`)}>View</button>
       </div>
     </div>
   )

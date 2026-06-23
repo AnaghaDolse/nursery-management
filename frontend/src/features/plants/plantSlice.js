@@ -47,7 +47,7 @@ export const addPlant = createAsyncThunk(
 export const fetchPlantById = createAsyncThunk(
   'plants/fetchPlantById',
   async (id) => {
-    const res = await API.get(`/${id}`)
+    const res = await API.get(`/plants/${id}`)
     return res.data
   },
 )
@@ -88,6 +88,7 @@ const plantSlice = createSlice({
     page: 1,
     pages: 1,
     total: 0,
+    selectedPlant: null,
   },
   extraReducers: (builder) => {
     builder

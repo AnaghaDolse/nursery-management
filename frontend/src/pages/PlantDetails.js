@@ -9,6 +9,7 @@ const PlantDetails = () => {
   const navigate = useNavigate()
 
   const { selectedPlant, loading } = useSelector((state) => state.plants)
+  console.log("Selected Plant:", selectedPlant)
 
   useEffect(() => {
     dispatch(fetchPlantById(id))
