@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../features/auth/authSlice'
 
 const Navbar = () => {
@@ -15,6 +15,9 @@ const Navbar = () => {
   return (
     <div className='navbar'>
       <h3>🌱 Jhaad Ugao</h3>
+      <Link to={'/favorites'}>
+        <button>❤ Favorites</button>
+      </Link>
       <div>
         <span>
           {user?.name}({user?.role})

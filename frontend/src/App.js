@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useSelector } from 'react-redux'
 import UserPlantGrid from './components/UserPlantGrid.js'
 import PlantDetails from './pages/PlantDetails.js'
+import Favourites from './pages/Favourites.js'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
@@ -60,6 +61,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <PlantDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/favorites'
+            element={
+              <ProtectedRoute>
+                <Favourites />
               </ProtectedRoute>
             }
           />
