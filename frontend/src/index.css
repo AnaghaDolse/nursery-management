@@ -239,6 +239,28 @@ input[type='checkbox'] {
   margin-bottom: 20px;
 }
 
+.favorites-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+}
+
+.empty-state button {
+  margin-top: 20px;
+}
+
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
 @keyframes loading {
   0% {
     background-position: 200% 0;

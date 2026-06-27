@@ -14,19 +14,30 @@ const Favourites = () => {
   // ✅ Add condition here
   if (favouritePlants.length === 0) {
     return (
-      <div>
-        <h2>My Favourites ❤️</h2>
-        <p>No favourite plants yet.</p>
-        <p>Click the ❤️ button on a plant to add it here.</p>
+      <div className='empty-state'>
+        <h2>❤️ My Favorites</h2>
+
+        <h3>No favorite plants yet!</h3>
+
+        <p>Start exploring and save your favorite plants.</p>
+
+        <button onClick={() => navigate('/add-plant')}>🌱 Browse Plants</button>
       </div>
     )
   }
 
   return (
     <div>
-      <h2>My Favourites</h2>
+      <div className='favorites-header'>
+        <h2>❤️ My Favorites</h2>
 
-      <button onClick={() => navigate('/add-plant')}>← Back to plant</button>
+        <button onClick={() => navigate('/add-plant')}>← Back</button>
+      </div>
+
+      <p>
+        {favouritePlants.length} favorite plant
+        {favouritePlants.length > 1 ? 's' : ''}
+      </p>
 
       <div className='plant-grid'>
         {favouritePlants.map((plant) => (
