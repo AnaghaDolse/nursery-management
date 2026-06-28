@@ -89,6 +89,25 @@ const plantSlice = createSlice({
     pages: 1,
     total: 0,
     selectedPlant: null,
+    favorites: JSON.parse(localStorage.getItem('favorites') || []),
+  },
+  reducers: {
+    toggleFavorite: (state, action) => {
+      const plantId = action.payload
+
+      if (state.favorites.includes(plantId)) {
+        state.favorites = state.favorites.filter(
+          (id) => id !== plantId,
+        )
+      } else {
+        state.favorites.push(plantId)
+      }
+
+      localStorage.setItem(
+        'favorites',
+        JSON.stringify(state.favorites),
+      )
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -126,4 +145,5 @@ const plantSlice = createSlice({
   },
 })
 
+export const { toggleFavortie } = plantSlice.actions
 export default plantSlice.reducer
