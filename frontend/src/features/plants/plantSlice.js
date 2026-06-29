@@ -145,5 +145,5 @@ const plantSlice = createSlice({
   },
 })
 
-export const { toggleFavortie } = plantSlice.actions
+export const { toggleFavorite } = plantSlice.actions
 export default plantSlice.reducer

@@ -1,27 +1,15 @@
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toggleFavorite } from '../features/plants/plantSlice'
 
 const PlantCard = ({ plant }) => {
   const navigate = useNavigate()
-  const [isFav, setIsFav] = useState(() => {
-    const favs = JSON.parse(localStorage.getItem('favorites')) || []
-    return favs.includes(plant._id)
-  })
 
-  const toggleFav = () => {
-    const favs = JSON.parse(localStorage.getItem('favorites')) || []
+  const dispatch = useDispatch()
 
-    let updatedFavs
+  const { favorites } = useSelector((state) => state.plants)
 
-    if (favs.includes(plant._id)) {
-      updatedFavs = favs.filter((id) => id !== plant._id)
-    } else {
-      updatedFavs = [...favs, plant._id]
-    }
-
-    localStorage.setItem('favorites', JSON.stringify(updatedFavs))
-    setIsFav(!isFav)
-  }
+  const isFav = favorites.includes(plant._id)
 
   return (
     <div className='plant-card'>
@@ -34,7 +22,7 @@ const PlantCard = ({ plant }) => {
       <p>₹{plant.price}</p>
 
       <div className='actions'>
-        <button onClick={toggleFav}>{isFav ? '❤️' : '🤍'}</button>
+        <button onClick={() => dispatch(toggleFavorite(plant._id))}>{isFav ? '❤️' : '🤍'}</button>
         <button onClick={() => navigate(`/plant/${plant._id}`)}>View</button>
       </div>
     </div>

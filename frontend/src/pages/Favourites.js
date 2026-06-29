@@ -4,13 +4,9 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 const Favourites = () => {
   const navigate = useNavigate()
-  const { data } = useSelector((state) => state.plants)
+  const { data, favorites } = useSelector((state) => state.plants)
 
-  const faovuriteIds = JSON.parse(localStorage.getItem('favorites')) || []
-
-  const favouritePlants = data.filter((plant) =>
-    faovuriteIds.includes(plant._id),
-  )
+  const favouritePlants = data.filter((plant) => favorites.includes(plant._id))
   // ✅ Add condition here
   if (favouritePlants.length === 0) {
     return (
