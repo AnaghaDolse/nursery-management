@@ -15,14 +15,11 @@ export const fetchPlants = createAsyncThunk(
       params.append('category', selectedCategories.join(','))
     }
 
-    const response = await API.get(
-      `http://localhost:5000/api/plants?${params.toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await API.get(`/plants?${params.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
     return response.data
   },
 )
@@ -30,16 +27,12 @@ export const fetchPlants = createAsyncThunk(
 export const addPlant = createAsyncThunk(
   'plants/addPlant',
   async (plantData) => {
-    const response = await API.post(
-      'http://localhost:5000/api/plants',
-      plantData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await API.post('/plants', plantData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
     return response.data
   },
 )
@@ -79,6 +72,35 @@ export const deletePlant = createAsyncThunk(
   },
 )
 
+export const fetchFavorites = createAsyncThunk(
+  'plants/fetchFavorites',
+  async (_, thunkAPI) => {
+    try {
+      const response = await API.get('/users/favorites')
+      return response.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to fetch favorites',
+      )
+    }
+  },
+)
+
+export const toggleFavorite = createAsyncThunk(
+  'plants/toggleFavorite',
+  async (plantId, thunkAPI) => {
+    try {
+      const response = await API.post(`/users/favorites/${plantId}`)
+
+      return response.data.favorites
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to toggle favorite',
+      )
+    }
+  },
+)
+
 const plantSlice = createSlice({
   name: 'plants',
   initialState: {
@@ -89,26 +111,9 @@ const plantSlice = createSlice({
     pages: 1,
     total: 0,
     selectedPlant: null,
-    favorites: JSON.parse(localStorage.getItem('favorites') || []),
+    favorites: [],
   },
-  reducers: {
-    toggleFavorite: (state, action) => {
-      const plantId = action.payload
 
-      if (state.favorites.includes(plantId)) {
-        state.favorites = state.favorites.filter(
-          (id) => id !== plantId,
-        )
-      } else {
-        state.favorites.push(plantId)
-      }
-
-      localStorage.setItem(
-        'favorites',
-        JSON.stringify(state.favorites),
-      )
-    }
-  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPlants.pending, (state) => {
@@ -142,8 +147,21 @@ const plantSlice = createSlice({
       .addCase(deletePlant.fulfilled, (state, action) => {
         state.data = state.data.filter((plant) => plant._id !== action.meta.arg)
       })
+      .addCase(fetchFavorites.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.loading = false
+        state.favorites = action.payload
+      })
+      .addCase(fetchFavorites.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        state.favorites = action.payload
+      })
   },
 })
 
-export const { toggleFavorite } = plantSlice.actions
 export default plantSlice.reducer
