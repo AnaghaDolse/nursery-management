@@ -77,7 +77,7 @@ export const fetchFavorites = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await API.get('/users/favorites')
-      return response.data
+      return response.data.favorites
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'Failed to fetch favorites',

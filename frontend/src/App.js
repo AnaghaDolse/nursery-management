@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 import Login from './pages/Login.js'
@@ -8,14 +8,22 @@ import AddPlant from './components/AddPlant'
 import PlantList from './components/PlantList'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import UserPlantGrid from './components/UserPlantGrid.js'
 import PlantDetails from './pages/PlantDetails.js'
 import Favourites from './pages/Favourites.js'
+import { fetchFavorites } from './features/plants/plantSlice.js'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
   const { token, user } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchFavorites())
+    }
+  }, [dispatch, token])
 
   return (
     <Router>

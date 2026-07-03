@@ -6,7 +6,7 @@ const Favourites = () => {
   const navigate = useNavigate()
   const { data, favorites } = useSelector((state) => state.plants)
 
-  const favouritePlants = data.filter((plant) => favorites.includes(plant._id))
+  const favouritePlants = favorites
   // ✅ Add condition here
   if (favouritePlants.length === 0) {
     return (
