@@ -50,17 +50,18 @@ function App() {
             path='/add-plant'
             element={
               <ProtectedRoute>
-                <>
-                  <AddPlant
-                    editingPlant={editingPlant}
-                    setEditingPlant={setEditingPlant}
-                  />
-                  {user?.role === 'admin' ? (
+                {user?.role === 'admin' ? (
+                  <>
+                    <AddPlant
+                      editingPlant={editingPlant}
+                      setEditingPlant={setEditingPlant}
+                    />
+
                     <PlantList setEditingPlant={setEditingPlant} />
-                  ) : (
-                    <UserPlantGrid />
-                  )}
-                </>
+                  </>
+                ) : (
+                  <UserPlantGrid />
+                )}
               </ProtectedRoute>
             }
           />
