@@ -12,6 +12,18 @@ const userSchema = new mongoose.Schema(
         ref: 'Plant',
       },
     ],
+    cart: [
+      {
+        plant: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Plant',
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+      },
+    ],
   },
 
   { timestamps: true },
