@@ -1,9 +1,10 @@
 import express from 'express'
 import { authMiddleware } from '../middleware/authMiddleware.js'
-import { addToCart } from '../controllers/cartController.js'
+import { addToCart, getCart } from '../controllers/cartController.js'
 
 const router = express.Router()
 
 router.post('/', authMiddleware, addToCart)
+router.get('/', authMiddleware, getCart)
 
 export default router
