@@ -30,10 +30,30 @@ export const addToCart = async (req, res) => {
 export const getCart = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate('cart.plant')
-    if(!user) {
+    if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
     return res.status(200).json({ cart: user.cart })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const removeFromCart = async (req, res) => {
+  try {
+    const { plantId } = req.params
+
+    const user = await User.findById(req.user.id)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    user.cart = user.cart.filter((item) => item.plant.toString() !== plantId)
+
+    await user.save()
+    return res
+      .status(200)
+      .json({ message: 'Plant removed from cart', cart: user.cart })
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
