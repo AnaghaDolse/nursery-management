@@ -18,6 +18,9 @@ const Navbar = () => {
       <Link to={'/favorites'}>
         <button>❤ Favorites</button>
       </Link>
+      <Link to={'/cart'}>
+        <button>Cart 🛒</button>
+      </Link>
       <div>
         <span>
           {user?.name}({user?.role})

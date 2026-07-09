@@ -13,6 +13,7 @@ import UserPlantGrid from './components/UserPlantGrid.js'
 import PlantDetails from './pages/PlantDetails.js'
 import Favourites from './pages/Favourites.js'
 import { fetchFavorites } from './features/plants/plantSlice.js'
+import Cart from './pages/Cart.js'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
@@ -78,6 +79,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Favourites />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/cart'
+            element={
+              <ProtectedRoute>
+                <Cart />
               </ProtectedRoute>
             }
           />
