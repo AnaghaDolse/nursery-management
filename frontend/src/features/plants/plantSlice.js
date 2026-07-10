@@ -65,7 +65,7 @@ export const updatePlant = createAsyncThunk(
 export const deletePlant = createAsyncThunk(
   'plants/deletePlant',
   async (id) => {
-    await API.delete(`http://localhost:5000/api/plants/${id}`, {
+    await API.delete(`/plants/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     return id

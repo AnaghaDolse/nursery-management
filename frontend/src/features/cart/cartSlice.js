@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import API from '../../api/axios'
 
+const token = localStorage.getItem('token')
+
 export const fetchCart = createAsyncThunk(
   'cart/getCart',
   async (_, thunkAPI) => {
@@ -10,6 +12,20 @@ export const fetchCart = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'Failed to fetch cart',
+      )
+    }
+  },
+)
+
+export const removeFromCart = createAsyncThunk(
+  'cart/removeFromCart',
+  async (id, thunkAPI) => {
+    try {
+      const response = await API.delete(`/cart/${id}`)
+      return response.data.cart
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'failed to remove item from cart',
       )
     }
   },
@@ -34,6 +50,16 @@ const cartSlice = createSlice({
         state.cart = action.payload
       })
       .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+      .addCase(removeFromCart.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.cart = action.payload
+      })
+      .addCase(removeFromCart.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
