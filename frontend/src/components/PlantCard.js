@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { toggleFavorite } from '../features/plants/plantSlice' 
+import { toggleFavorite } from '../features/plants/plantSlice'
 
 const PlantCard = ({ plant }) => {
   const navigate = useNavigate()
@@ -26,6 +26,7 @@ const PlantCard = ({ plant }) => {
           {isFav ? '❤️' : '🤍'}
         </button>
         <button onClick={() => navigate(`/plant/${plant._id}`)}>View</button>
+        <button>Add to Cart</button>
       </div>
     </div>
   )

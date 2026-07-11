@@ -1,11 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCart, removeFromCart } from '../features/cart/cartSlice'
+import { toast } from 'react-toastify'
 
 const Cart = () => {
   const dispatch = useDispatch()
-  let { cart, loading, error } = useSelector((state) => state.cart)
-  console.log(cart)
+  const { cart, loading, error } = useSelector((state) => state.cart)
+  const totalAmount = cart.reduce(
+    (total, item) => total + item.plant.price * item.quantity,
+    0,
+  )
 
   useEffect(() => {
     dispatch(fetchCart())
@@ -30,9 +34,22 @@ const Cart = () => {
               />{' '}
               <h3>{item.plant.name}</h3> <p>₹{item.plant.price}</p>
               <p>Quantity: {item.quantity}</p>
-              <button onClick={() => dispatch(removeFromCart(item.plant._id))}>
+              <button
+                className='delete'
+                onClick={() => {
+                  dispatch(removeFromCart(item.plant._id))
+                    .unwrap()
+                    .then(() => {
+                      toast.success('Item removed from cart successfully!')
+                    })
+                    .catch((error) => {
+                      toast.error(error)
+                    })
+                }}
+              >
                 Remove
               </button>
+              <h3>Total: ₹{totalAmount.toFixed(2)}</h3>
             </div>
           ))
       )}
