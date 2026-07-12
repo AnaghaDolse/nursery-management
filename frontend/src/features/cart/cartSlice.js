@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import API from '../../api/axios'
 
-const token = localStorage.getItem('token')
-
 export const fetchCart = createAsyncThunk(
   'cart/getCart',
   async (_, thunkAPI) => {
@@ -12,6 +10,20 @@ export const fetchCart = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'Failed to fetch cart',
+      )
+    }
+  },
+)
+
+export const addToCart = createAsyncThunk(
+  'cart/addToCart',
+  async (plantId, thunkAPI) => {
+    try {
+      const response = await API.post('/cart', { plantId: plantId })
+      return response.data.cart
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to add item to cart',
       )
     }
   },
@@ -50,6 +62,17 @@ const cartSlice = createSlice({
         state.cart = action.payload
       })
       .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+      .addCase(addToCart.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.loading = false
+        state.cart = action.payload
+      })
+      .addCase(addToCart.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })

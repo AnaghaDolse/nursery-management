@@ -19,9 +19,15 @@ export const addToCart = async (req, res) => {
     }
 
     await user.save()
+
+    const updatedUser = await User.findById(req.user.id).populate('cart.plant')
+
     return res
       .status(200)
-      .json({ message: 'Plant added to cart', cart: user.cart })
+      .json({
+        message: 'Plant added to cart',
+        cart: updatedUser.cart,
+      })
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
