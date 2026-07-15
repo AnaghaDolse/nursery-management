@@ -44,6 +44,7 @@ const Cart = () => {
                 <div>
                   <div className='quantity-section'></div>
                   <button
+                    className='qty-btn'
                     onClick={() =>
                       dispatch(
                         updateQuantity({
@@ -57,6 +58,7 @@ const Cart = () => {
                   </button>
                   <p>Quantity: {item.quantity}</p>
                   <button
+                    className='qty-btn'
                     onClick={() =>
                       dispatch(
                         updateQuantity({
@@ -91,6 +93,10 @@ const Cart = () => {
             </div>
           ))
       )}
+      <div className='cart-total'>
+        <h2>Total Amount: ₹{totalAmount.toFixed(2)}</h2>
+        <button className='checkout-btn'>Proceed to Checkout</button>
+      </div>
     </div>
   )
 }
