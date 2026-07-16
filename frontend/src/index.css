@@ -325,7 +325,7 @@ input[type='checkbox'] {
   color: white;
   cursor: pointer;
   font-size: 18px;
-  transition: 3s;
+  transition: 0.3s;
 }
 
 .qty-btn:hover {

@@ -31,7 +31,7 @@ const Cart = () => {
           .filter((item) => item.plant)
           .map((item) => (
             <div className='cart-card' key={item.plant._id}>
-              <div className='card-image'>
+              <div className='cart-image'>
                 <img
                   src={`http://localhost:5000${item.plant.image}`}
                   alt={item.plant.name}
@@ -41,22 +41,7 @@ const Cart = () => {
               <div className='card-details'>
                 <h3>{item.plant.name}</h3>{' '}
                 <p className='price'>₹{item.plant.price}</p>
-                <div>
-                  <div className='quantity-section'></div>
-                  <button
-                    className='qty-btn'
-                    onClick={() =>
-                      dispatch(
-                        updateQuantity({
-                          plantId: item.plant._id,
-                          action: 'increase',
-                        }),
-                      )
-                    }
-                  >
-                    ➕
-                  </button>
-                  <p>Quantity: {item.quantity}</p>
+                <div className='quantity-section'>
                   <button
                     className='qty-btn'
                     onClick={() =>
@@ -70,10 +55,24 @@ const Cart = () => {
                   >
                     ➖
                   </button>
-                  <p className='subtotal'>
-                    Subtotal: ₹{(item.plant.price * item.quantity).toFixed(2)}
-                  </p>
+                  <p>Quantity: {item.quantity}</p>
+                  <button
+                    className='qty-btn'
+                    onClick={() =>
+                      dispatch(
+                        updateQuantity({
+                          plantId: item.plant._id,
+                          action: 'increase',
+                        }),
+                      )
+                    }
+                  >
+                    ➕
+                  </button>{' '}
                 </div>
+                <p className='subtotal'>
+                  Subtotal: ₹{(item.plant.price * item.quantity).toFixed(2)}
+                </p>
                 <button
                   className='delete'
                   onClick={() => {
