@@ -22,7 +22,7 @@ h2 {
   color: #000000;
 }
 
-form {
+/* form {
   padding: 30px;
   margin-bottom: 30px;
   border: 2px solid #0d530e;
@@ -37,7 +37,7 @@ textarea {
   margin: 8px 0;
   border: 1px solid #000;
   border-radius: 5px;
-}
+} */
 
 button {
   padding: 8px 12px;

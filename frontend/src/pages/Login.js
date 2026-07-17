@@ -1,4 +1,5 @@
 import './Login.css'
+import plantImage from '../assets/login_plant.jfif'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -40,31 +41,26 @@ const Login = () => {
     <div className='login-page'>
       <div className='login-container'>
         {/* Left Side */}
-
         <div className='login-left'>
-          <h1>🌿 Jhaad Ugao</h1>
-
-          <p>Welcome back!</p>
-
-          <p className='tagline'>Grow your dream garden with us.</p>
-
-          <img
-            src='https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=700'
-            alt='Plants'
-          />
+          <div className='overlay'>
+          <img src={plantImage} alt='Plants' />
+            <h1>🌿 Jhaad Ugao</h1>
+            <p className='welcome-text'>Grow your dream garden with us</p>
+            <p className='description'>
+              Discover beautiful plants, manage your nursery, and bring nature
+              closer to your home.
+            </p>
+          </div>
         </div>
 
         {/* Right Side */}
-
         <div className='login-right'>
           <form className='login-form' onSubmit={handleLogin}>
             <h2>Welcome Back 👋</h2>
-
-            <p className='subtitle'>Login to continue</p>
+            <p className='subtitle'>Login to continue your gardening journey</p>
 
             <div className='input-group'>
-              <label>Email</label>
-
+              <label>Email Address</label>
               <input
                 type='email'
                 placeholder='Enter your email'
@@ -76,7 +72,6 @@ const Login = () => {
 
             <div className='input-group'>
               <label>Password</label>
-
               <input
                 type='password'
                 placeholder='Enter your password'
