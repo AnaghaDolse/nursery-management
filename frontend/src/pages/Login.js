@@ -40,10 +40,9 @@ const Login = () => {
   return (
     <div className='login-page'>
       <div className='login-container'>
-        {/* Left Side */}
         <div className='login-left'>
+          <img src={plantImage} alt='Plants' className='login-image' />
           <div className='overlay'>
-          <img src={plantImage} alt='Plants' />
             <h1>🌿 Jhaad Ugao</h1>
             <p className='welcome-text'>Grow your dream garden with us</p>
             <p className='description'>
