@@ -6,11 +6,13 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -43,7 +45,7 @@ const Login = () => {
         <div className='login-left'>
           <img src={plantImage} alt='Plants' className='login-image' />
           <div className='overlay'>
-            <h1>🌿 Jhaad Ugao</h1>
+            <h1>Jhaad Ugao</h1>
             <p className='welcome-text'>Grow your dream garden with us</p>
             <p className='description'>
               Discover beautiful plants, manage your nursery, and bring nature
@@ -71,13 +73,24 @@ const Login = () => {
 
             <div className='input-group'>
               <label>Password</label>
-              <input
-                type='password'
-                placeholder='Enter your password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className='password-wrapper'>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Enter your password'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type='button'
+                  className='password-toggle'
+                  onClick={() => {
+                    setShowPassword(!showPassword)
+                  }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
             </div>
 
             <button className='login-btn' type='submit' disabled={loading}>

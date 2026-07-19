@@ -51,18 +51,21 @@
   font-size: 48px;
   margin-bottom: 20px;
   color: white;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .welcome-text {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 15px;
 }
 
 .description {
-  font-size: 18px;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.8;
   max-width: 420px;
+  opacity: 0.95;
 }
 
 /* RIGHT SIDE */
@@ -76,8 +79,12 @@
 }
 
 .login-form {
-  width: 100%;
-  max-width: 400px;
+  width: 380px;
+  background: white;
+  padding: 45px;
+  border-radius: 18px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.8s ease;
 }
 
 .login-form h2 {
@@ -94,7 +101,7 @@
 
 /* INPUTS */
 .input-group {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .input-group label {
@@ -104,36 +111,64 @@
   color: #2e7d32;
 }
 
-.input-group input {
+.input-group input,
+.password-wrapper input {
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid #c8d6c9;
-  border-radius: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
   font-size: 16px;
-  transition: all 0.3s ease;
   box-sizing: border-box;
-  background: #fafafa;
+}
+
+.input-group input {
+  padding: 14px;
 }
 
 .input-group input:focus {
   outline: none;
   border-color: #2e7d32;
-  background: white;
   box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  padding: 14px 45px 14px 14px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+}
+
+.password-toggle:hover {
+  color: #2e7d32;
 }
 
 /* BUTTON */
 .login-btn {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   background: #2e7d32;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 17px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .login-btn:hover:not(:disabled) {
@@ -143,8 +178,9 @@
 }
 
 .login-btn:disabled {
-  opacity: 0.7;
+  background: #94c39a;
   cursor: not-allowed;
+  transform: none;
 }
 
 /* REGISTER LINK */
@@ -169,6 +205,11 @@
   .login-container {
     flex-direction: column;
     min-height: auto;
+  }
+
+  .login-left,
+  .login-right {
+    width: 100%;
   }
 
   .login-left {
@@ -196,6 +237,11 @@
   .login-right {
     padding: 35px 25px;
   }
+
+  .login-form {
+    width: 90%;
+    margin: 40px auto;
+  }
 }
 
 @media (max-width: 500px) {
@@ -209,5 +255,17 @@
 
   .login-page {
     padding: 10px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    tranform: translateY(0);
   }
 }
