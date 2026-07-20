@@ -13,6 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -28,7 +29,21 @@ const Login = () => {
           password,
         },
       )
-      dispatch(loginSuccess(response.data))
+      const { token, user } = response.data
+      if (rememberMe) {
+        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('token', token)
+      } else {
+        sessionStorage.setItem('user', JSON.stringify(user))
+        sessionStorage.setItem('token', token)
+      }
+
+      dispatch(
+        loginSuccess({
+          token,
+          user,
+        }),
+      )
       toast.success('Login successful')
       navigate('/add-plant')
     } catch (error) {
@@ -91,6 +106,20 @@ const Login = () => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+            </div>
+
+            <div className='login-options'>
+              <label className='remember-me'>
+                <input
+                  type='checkbox'
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                Remember Me
+              </label>
+              <a href='/' className='forget-password'>
+                Forget Password?
+              </a>
             </div>
 
             <button className='login-btn' type='submit' disabled={loading}>

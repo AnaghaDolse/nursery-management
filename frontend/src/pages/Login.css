@@ -157,6 +157,40 @@
   color: #2e7d32;
 }
 
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 18px 0 25px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.remember-me input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.forgot-password {
+  text-decoration: none;
+  color: #2e7d32;
+  font-size: 15px;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.forgot-password:hover {
+  color: #1b5e20;
+}
+
 /* BUTTON */
 .login-btn {
   width: 100%;
