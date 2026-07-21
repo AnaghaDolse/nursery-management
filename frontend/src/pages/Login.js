@@ -1,7 +1,7 @@
 import './Login.css'
 import plantImage from '../assets/login_plant.jfif'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from '../features/auth/authSlice'
@@ -59,10 +59,10 @@ const Login = () => {
       <div className='login-container'>
         <div className='login-left'>
           <img src={plantImage} alt='Plants' className='login-image' />
-          <div className='overlay'>
+          <div className='login-overlay'>
             <h1>Jhaad Ugao</h1>
-            <p className='welcome-text'>Grow your dream garden with us</p>
-            <p className='description'>
+            <p className='login-welcome-text'>Grow your dream garden with us</p>
+            <p className='login-description'>
               Discover beautiful plants, manage your nursery, and bring nature
               closer to your home.
             </p>
@@ -117,9 +117,7 @@ const Login = () => {
                 />
                 Remember Me
               </label>
-              <a href='/' className='forget-password'>
-                Forget Password?
-              </a>
+              <Link to='/forgot-password' className='forgot-password'>Forgot Password?</Link>
             </div>
 
             <button className='login-btn' type='submit' disabled={loading}>

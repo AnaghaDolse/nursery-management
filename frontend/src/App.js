@@ -14,6 +14,7 @@ import PlantDetails from './pages/PlantDetails.js'
 import Favourites from './pages/Favourites.js'
 import { fetchFavorites } from './features/plants/plantSlice.js'
 import Cart from './pages/Cart.js'
+import ForgotPassword from './pages/ForgotPassword.jsx'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
@@ -45,6 +46,7 @@ function App() {
               )
             }
           />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
 
           {/*Protected Routes*/}
           <Route

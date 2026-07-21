@@ -32,18 +32,14 @@
   display: block;
 }
 
-.overlay {
+.login-overlay {
   position: absolute;
   inset: 0;
-
   background: rgba(18, 58, 31, 0.55);
-
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   color: white;
-
   padding: 60px;
 }
 
@@ -55,13 +51,13 @@
   letter-spacing: 1px;
 }
 
-.welcome-text {
+.login-welcome-text {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 15px;
 }
 
-.description {
+.login-description {
   font-size: 1rem;
   line-height: 1.8;
   max-width: 420px;
