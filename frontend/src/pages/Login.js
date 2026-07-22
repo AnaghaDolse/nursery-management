@@ -1,3 +1,4 @@
+import '../styles/Auth.css'
 import './Login.css'
 import plantImage from '../assets/login_plant.jfif'
 import { useState } from 'react'
@@ -55,11 +56,11 @@ const Login = () => {
   }
 
   return (
-    <div className='login-page'>
-      <div className='login-container'>
-        <div className='login-left'>
-          <img src={plantImage} alt='Plants' className='login-image' />
-          <div className='login-overlay'>
+    <div className='auth-page'>
+      <div className='auth-container'>
+        <div className='auth-left'>
+          <img src={plantImage} alt='Plants' className='auth-image' />
+          <div className='auth-overlay'>
             <h1>Jhaad Ugao</h1>
             <p className='login-welcome-text'>Grow your dream garden with us</p>
             <p className='login-description'>
@@ -70,8 +71,8 @@ const Login = () => {
         </div>
 
         {/* Right Side */}
-        <div className='login-right'>
-          <form className='login-form' onSubmit={handleLogin}>
+        <div className='auth-right'>
+          <form className='auth-form' onSubmit={handleLogin}>
             <h2>Welcome Back 👋</h2>
             <p className='subtitle'>Login to continue your gardening journey</p>
 
@@ -117,7 +118,9 @@ const Login = () => {
                 />
                 Remember Me
               </label>
-              <Link to='/forgot-password' className='forgot-password'>Forgot Password?</Link>
+              <Link to='/forgot-password' className='forgot-password'>
+                Forgot Password?
+              </Link>
             </div>
 
             <button className='login-btn' type='submit' disabled={loading}>
