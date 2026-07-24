@@ -1,6 +1,7 @@
 import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
 
 //SIGNUP
 export const signup = async (req, res) => {
@@ -60,5 +61,38 @@ export const login = async (req, res) => {
     })
   } catch (error) {
     res.status(500).json({ message: error.message })
+  }
+}
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body
+
+    //Check if user exists
+    const user = await User.findOne({ email })
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found',
+      })
+    }
+
+    //Generate reset toen
+    const resetToken = crypto.randomBytes(32).toString('hex')
+
+    //Save token and expiry
+    user.passwordResetToken = resetToken
+    user.passwordResetToken = Date.now() + 15 * 60 * 1000
+
+    await user.save()
+
+    return res.status(200).json({
+      message: 'Reset generated successfully',
+      resetToken,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    })
   }
 }
