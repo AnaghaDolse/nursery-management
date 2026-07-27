@@ -1,5 +1,9 @@
-import { text } from 'express'
+
+
 import nodemailer from 'nodemailer'
+
+console.log('EMAIL_USER:', process.env.EMAIL_USER)
+console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'Loaded ✅' : 'Missing ❌')
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -17,5 +21,13 @@ export const sendEmail = async (options) => {
     text: options.message,
   }
 
-  await transporter.sendMail(mailOptions)
+  const info = await transporter.sendMail(mailOptions)
+
+  console.log('Email sent:', info.response)
+
+  await sendEmail({
+    email: user.email,
+    subject: 'Password Reset Request',
+    message,
+  })
 }

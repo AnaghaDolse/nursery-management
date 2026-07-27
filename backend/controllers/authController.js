@@ -2,6 +2,7 @@ import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
+import { sendEmail } from '../utils/sendEmail.js'
 
 //SIGNUP
 export const signup = async (req, res) => {
@@ -85,6 +86,22 @@ export const forgotPassword = async (req, res) => {
     user.passwordResetToken = Date.now() + 15 * 60 * 1000
 
     await user.save()
+
+    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`
+
+    const message = `You requested a password reset.
+    
+    Click the link below to reset your password:
+    
+    ${resetUrl}
+    
+    If you did not request this request, please ignore this email.`
+
+    await sendEmail({
+      email: user.email,
+      subject: 'Password Reset Request',
+      message,
+    })
 
     return res.status(200).json({
       message: 'Reset generated successfully',
