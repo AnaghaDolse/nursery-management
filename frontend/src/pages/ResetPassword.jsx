@@ -1,7 +1,9 @@
+import axios from 'axios'
 import '../styles/Auth.css'
 import { useState } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useParams, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const ResetPassword = () => {
   const { token } = useParams()
@@ -15,6 +17,37 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDEfault()
+
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+    setLoading(true)
+
+    try {
+      await axios.post(
+        `http://localhost:5000/api/auth/reset-password/${token}`,
+        {
+          password,
+        },
+      )
+      toast.success('Password reset successfully')
+
+      setTimeout(() => {
+        navigate('/')
+      }, 1500)
+    } catch (error) {
+      console.log(error)
+
+      toast.error(error.response?.data?.message || 'Failed to reset password')
+    } finally {
+      setLoading(false)
+    }
   }
   return (
     <div className='forgot-container'>
@@ -84,8 +117,8 @@ const ResetPassword = () => {
             </div>
           </div>
 
-          <button className='login-btn' type='submit'>
-            Reset Password
+          <button className='login-btn' type='submit' disabled={loading}>
+            {loading ? 'Resetting Password...' : 'Reset Password'}
           </button>
         </form>
       </div>
