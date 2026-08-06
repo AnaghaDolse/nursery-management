@@ -16,7 +16,7 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
-    e.preventDEfault()
+    e.preventDefault()
 
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
@@ -27,6 +27,10 @@ const ResetPassword = () => {
       toast.error('Password must be at least 6 characters')
       return
     }
+     if (!token) {
+       toast.error('Invalid reset link')
+       return
+     }
     setLoading(true)
 
     try {
