@@ -2,15 +2,33 @@ import '../styles/Auth.css'
 import './ForgotPassword.css'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState(' ')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    console.log(email)
+    setLoading(true)
+
+    try {
+      await axios.post('http://localhost:5000/api/auth/forgot-password', {
+        email,
+      })
+
+      toast.success('Password reset link sent to your email')
+    } catch (error) {
+      console.error(error)
+
+      toast.error(error.response?.data?.message || 'Failed to send reset link')
+    } finally {
+      setLoading(false)
+    }
   }
+
   return (
     <div className='auth-page'>
       <div className='auth-container'>
@@ -41,8 +59,8 @@ const ForgotPassword = () => {
                 required
               />
             </div>
-            <button className='login-btn' type='submit'>
-              Send Reset Link
+            <button className='login-btn' type='submit' disabled={loading}>
+              {loading ? 'Sending...' : 'Send Reset Link'}
             </button>
 
             <p className='back-login'>
