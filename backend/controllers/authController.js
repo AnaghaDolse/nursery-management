@@ -83,7 +83,7 @@ export const forgotPassword = async (req, res) => {
 
     //Save token and expiry
     user.passwordResetToken = resetToken
-    user.passwordResetToken = Date.now() + 15 * 60 * 1000
+    user.passwordResetExpires = Date.now() + 15 * 60 * 1000
 
     await user.save()
 
@@ -129,7 +129,7 @@ export const resetPassword = async (req, res) => {
         message: 'Invalid or expired reset token',
       })
     }
-    user.password = await bycrypt.hash(password, 10)
+    user.password = await bcrypt.hash(password, 10)
 
     user.passwordResetToken = undefined
     user.passwordResetExpires = undefined
