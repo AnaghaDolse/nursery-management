@@ -20,13 +20,15 @@ import ResetPassword from './pages/ResetPassword.jsx'
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
   const { token, user } = useSelector((state) => state.auth)
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (token) {
-      dispatch(fetchFavorites())
-    }
-  }, [dispatch, token])
+  const storedToken =
+    localStorage.getItem('token') || sessionStorage.getItem('token')
+
+  // useEffect(() => {
+  //   if (token) {
+  //     dispatch(fetchFavorites())
+  //   }
+  // }, [dispatch, token])
 
   return (
     <Router>
@@ -39,13 +41,7 @@ function App() {
           {/*Login Route*/}
           <Route
             path='/'
-            element={
-              localStorage.getItem('token') ? (
-                <Navigate to='/add-plant' />
-              ) : (
-                <Login />
-              )
-            }
+            element={storedToken ? <Navigate to='/add-plant' /> : <Login />}
           />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password/:token' element={<ResetPassword />} />
