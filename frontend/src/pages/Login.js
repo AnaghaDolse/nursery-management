@@ -124,7 +124,7 @@ const Login = () => {
             </div>
 
             <button className='login-btn' type='submit' disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? 'Signing in...' : 'Login'}
             </button>
 
             <p className='register-link'>
