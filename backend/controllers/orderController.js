@@ -5,6 +5,8 @@ export const createOrder = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate('cart.plant')
 
+    console.log('USER CART:', user.cart)
+
     if (!user) {
       return res.status(404).json({
         message: 'User not found',
@@ -17,15 +19,16 @@ export const createOrder = async (req, res) => {
       })
     }
 
-    const { shippingAddres } = req.body
-    if (!shippingAddres) {
+    const { shippingAddress } = req.body
+
+    if (!shippingAddress) {
       return res.status(400).json({
         message: 'Shipping address is required',
       })
     }
 
     const items = user.cart.map((item) => ({
-      plant: item.plant_id,
+      plant: item.plant._id,
       name: item.plant.name,
       price: item.plant.price,
       quantity: item.quantity,
