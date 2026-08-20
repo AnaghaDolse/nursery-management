@@ -16,6 +16,7 @@ import { fetchFavorites } from './features/plants/plantSlice.js'
 import Cart from './pages/Cart.js'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
+import Checkout from './pages/Checkout.jsx'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
@@ -87,6 +88,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Cart />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/checkout'
+            element={
+              <ProtectedRoute>
+                <Checkout />
               </ProtectedRoute>
             }
           />

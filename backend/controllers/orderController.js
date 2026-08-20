@@ -5,8 +5,6 @@ export const createOrder = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate('cart.plant')
 
-    console.log('USER CART:', user.cart)
-
     if (!user) {
       return res.status(404).json({
         message: 'User not found',

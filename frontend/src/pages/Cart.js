@@ -6,9 +6,12 @@ import {
   updateQuantity,
 } from '../features/cart/cartSlice'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const { cart, loading, error } = useSelector((state) => state.cart)
   const totalAmount = cart.reduce(
     (total, item) => total + item.plant.price * item.quantity,
@@ -94,7 +97,9 @@ const Cart = () => {
       )}
       <div className='cart-total'>
         <h2>Total Amount: ₹{totalAmount.toFixed(2)}</h2>
-        <button className='checkout-btn'>Proceed to Checkout</button>
+        <button className='login-btn' onClick={() => navigate('/checkout')}>
+          Proceed to Checkout
+        </button>
       </div>
     </div>
   )
