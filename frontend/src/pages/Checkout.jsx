@@ -49,7 +49,9 @@ const Checkout = () => {
       })
       toast.success('Order placed successfully!')
 
-      navigate('/orders')
+      setTimeout(() => {
+        navigate('/orders')
+      }, 1000)
     } catch (error) {
       console.log(error)
 
