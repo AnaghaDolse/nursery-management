@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import API from '../api/axios'
 import { toast } from 'react-toastify'
+import '../pages/Orders.css'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
@@ -17,9 +18,29 @@ const Orders = () => {
     }
   }
 
+  const formatDate = (date) => {
+    if (!date) return 'N/A'
+
+    const parsedDate = new Date(date)
+
+    if (isNaN(parsedDate.getTime())) {
+      return 'Invalid Date'
+    }
+
+    return parsedDate.toLocaleDateString('em-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    })
+  }
+
   useEffect(() => {
     fetchOrders()
   }, [])
+
+  if (loading) {
+    return <p>Loading orders...</p>
+  }
 
   return (
     <div>
@@ -29,14 +50,17 @@ const Orders = () => {
         <p>You have no orders yet.</p>
       ) : (
         orders.map((order) => (
-          <div key={order.id}>
+          <div key={order._id}>
             <h3>Order #{order._id}</h3>
 
-            <p>
-              Status: <strong>{order.status}</strong>
-            </p>
+            <p>Order Date: {formatDate(order.createdAt)}</p>
 
-            <p>Total: ₹{order.totalAmount.toFixed(2)}</p>
+            <p>
+              Status:{' '}
+              <span className={`status-badge ${order.status.toLowerCase()}`}>
+                {order.status}
+              </span>
+            </p>
 
             <h4>Items</h4>
 
@@ -48,6 +72,18 @@ const Orders = () => {
                 <p>₹{(item.price * item.quantity).toFixed(2)}</p>
               </div>
             ))}
+
+            <h4>Shipping Address</h4>
+
+            <p>{order.shippingAddress.name}</p>
+            <p>{order.shippingAddress.phone}</p>
+            <p>{order.shippingAddress.address}</p>
+            <p>
+              {order.shippingAddress.city}, {order.shippingAddress.state} -{' '}
+              {order.shippingAddress.pincode}
+            </p>
+
+            <h3>Total: ₹{order.totalAmount.toFixed(2)}</h3>
 
             <hr />
           </div>
