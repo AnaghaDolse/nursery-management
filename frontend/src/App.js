@@ -18,6 +18,7 @@ import ForgotPassword from './pages/ForgotPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
 import Checkout from './pages/Checkout.jsx'
 import Orders from './pages/Orders.jsx'
+import AdminOrders from './pages/AdminOrders.jsx'
 
 function App() {
   const [editingPlant, setEditingPlant] = useState(null)
@@ -107,8 +108,20 @@ function App() {
                 <Orders />
               </ProtectedRoute>
             }
-          />
+          /><Route
+          path='/admin/orders'
+          element={
+            <ProtectedRoute>
+              {user?.role === 'admin' ? (
+                <AdminOrders />
+              ) : (
+                <Navigate to='/add-plant' />
+              )}
+            </ProtectedRoute>
+          }
+        />
         </Routes>
+        
         <ToastContainer />
       </div>
     </Router>
