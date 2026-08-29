@@ -26,6 +26,25 @@ const AdminOrders = () => {
     return <p>Loading orders...</p>
   }
 
+  const handleStatusChange = async (orderId, status) => {
+    try {
+      const response = await API.patch(`/orders/${orderId}/status`, {
+        status,
+      })
+
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? response.data.order : order,
+        ),
+      )
+      toast.success('Order status updated successfully')
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || 'Failed to update order status',
+      )
+    }
+  }
+
   return (
     <div>
       <h2>Manage Orders</h2>
@@ -43,14 +62,25 @@ const AdminOrders = () => {
 
             <p>Email: {order.user?.email}</p>
 
-            <p>
-              Status:{' '}
-              <span className={`status-badge ${order.status.toLowerCase()}`}>
-                {order.status}
-              </span>
-            </p>
-
-            <h4>Items</h4>
+            <div>
+              <p>
+                Status:{' '}
+                <span className={`status-badge ${order.status.toLowerCase()}`}>
+                  {order.status}
+                </span>
+              </p>
+              <h4>Items</h4>
+              <select
+                value={order.status}
+                onChange={(e) => handleStatusChange(order._id, e.target.value)}
+              >
+                <option value='Pending'>Pending</option>
+                <option value='Confirmed'>Confirmed</option>
+                <option value='Shipped'>Shipped</option>
+                <option value='Delivered'>Delivered</option>
+                <option value='Cancelled'>Cancelled</option>
+              </select>
+            </div>
 
             {order.items.map((item) => (
               <div key={item._id}>
