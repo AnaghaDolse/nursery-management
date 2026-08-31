@@ -1,5 +1,6 @@
 import User from '../models/User.js'
 import Order from '../models/Order.js'
+import Plant from '../models/Plant.js'
 
 export const createOrder = async (req, res) => {
   try {
@@ -25,6 +26,14 @@ export const createOrder = async (req, res) => {
       })
     }
 
+    for (const item of user.cart) {
+      if (item.quantity > item.plant.stock) {
+        return res.status(400).json({
+          message: `Insufficient stock for ${item.plant.name}`,
+        })
+      }
+    }
+
     const items = user.cart.map((item) => ({
       plant: item.plant._id,
       name: item.plant.name,
@@ -43,6 +52,12 @@ export const createOrder = async (req, res) => {
       totalAmount,
       shippingAddress,
     })
+
+    for (const item of user.cart) {
+      await Plant.findByIdAndUpdate(item.plant._id, {
+        $inc: { stock: -item.quantity },
+      })
+    }
 
     user.cart = []
 

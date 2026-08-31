@@ -47,7 +47,9 @@ export const updateQuantity = createAsyncThunk(
   'cart/updateQuantity',
   async ({ plantId, action }, thunkAPI) => {
     try {
-      const response = await API.patch(`/cart/updateQuantity/${plantId}`, { action })
+      const response = await API.patch(`/cart/updateQuantity/${plantId}`, {
+        action,
+      })
       return response.data.cart
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -80,36 +82,30 @@ const cartSlice = createSlice({
         state.error = action.payload
       })
       .addCase(addToCart.pending, (state) => {
-        state.loading = true
+        state.error = null
       })
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.loading = false
         state.cart = action.payload
       })
       .addCase(addToCart.rejected, (state, action) => {
-        state.loading = false
         state.error = action.payload
       })
       .addCase(removeFromCart.pending, (state) => {
-        state.loading = true
+        state.error = null
       })
       .addCase(removeFromCart.fulfilled, (state, action) => {
-        state.loading = false
         state.cart = action.payload
       })
       .addCase(removeFromCart.rejected, (state, action) => {
-        state.loading = false
         state.error = action.payload
       })
       .addCase(updateQuantity.pending, (state) => {
-        state.loading = true
+        state.error = null
       })
       .addCase(updateQuantity.fulfilled, (state, action) => {
-        state.loading = false
         state.cart = action.payload
       })
       .addCase(updateQuantity.rejected, (state, action) => {
-        state.loading = false
         state.error = action.payload
       })
   },
