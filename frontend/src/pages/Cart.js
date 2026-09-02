@@ -76,10 +76,16 @@ const Cart = () => {
                       }),
                     )
                   }
+                  disabled={item.quantity >= item.plant.stock}
                 >
                   ➕
                 </button>{' '}
               </div>
+              <p className='stock-info'>
+                {item.quantity >= item.plant.stock
+                  ? 'Maximum available quantity reached'
+                  : `${item.plant.stock} available in stock`}
+              </p>
               <p className='subtotal'>
                 Subtotal: ₹{(item.plant.price * item.quantity).toFixed(2)}
               </p>

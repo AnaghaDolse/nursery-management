@@ -1,4 +1,5 @@
 import User from '../models/User.js'
+import Plant from '../models/Plant.js'
 
 export const addToCart = async (req, res) => {
   try {
@@ -69,6 +70,7 @@ export const updateQuantity = async (req, res) => {
     const { action } = req.body
 
     const user = await User.findById(req.user.id)
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
@@ -80,6 +82,20 @@ export const updateQuantity = async (req, res) => {
     }
 
     if (action === 'increase') {
+      const plant = await Plant.findById(plantId)
+
+      if (!plant) {
+        return res.status(404).json({
+          message: 'Plant not found',
+        })
+      }
+
+      if (item.quantity >= plant.stock) {
+        return res.status(400).json({
+          message: `Only ${plant.stock} ${plant.name} available in stock`,
+        })
+      }
+
       item.quantity += 1
     } else if (action === 'decrease') {
       if (item.quantity > 1) {
@@ -87,6 +103,10 @@ export const updateQuantity = async (req, res) => {
       } else {
         user.cart = user.cart.filter((i) => i.plant.toString() !== plantId)
       }
+    } else {
+      return res.status(400).json({
+        message: 'Invalid action',
+      })
     }
 
     await user.save()
