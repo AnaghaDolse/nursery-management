@@ -111,18 +111,12 @@ export const updateOrderStatus = async (req, res) => {
     const { orderId } = req.params
     const { status } = req.body
 
-    const allowedStatuses = [
-      'Pending',
-      'Confirmed',
-      'Shipped',
-      'Delivered',
-      'Cancelled',
-    ]
-
-    if (!allowedStatuses.includes(status)) {
-      return res.status(400).json({
-        message: 'Invalid order status',
-      })
+    const allowedTransitions = {
+      Pending: ['Confirmed', 'Cancelled'],
+      Confirmed: ['Shipped', 'Cancelled'],
+      Shipped: ['Delivered'],
+      Delivered: [],
+      Cancelled: [],
     }
 
     const order = await Order.findById(orderId)
@@ -130,6 +124,12 @@ export const updateOrderStatus = async (req, res) => {
     if (!order) {
       return res.status(404).json({
         message: 'Order not found',
+      })
+    }
+
+    if (!allowedTransitions[order.status]?.includes(status)) {
+      return res.status(400).json({
+        message: 'Cannot change order status from ${order.status} to ${status}',
       })
     }
 

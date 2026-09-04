@@ -7,6 +7,14 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
 
+  const allowedTransitions = {
+    Pending: ['Confirmed', 'Cancelled'],
+    Confirmed: ['Shipped', 'Cancelled'],
+    Shipped: ['Delivered'],
+    Delivered: [],
+    Cancelled: [],
+  }
+
   const fetchOrders = async () => {
     try {
       const response = await API.get('/orders/admin')
@@ -73,12 +81,14 @@ const AdminOrders = () => {
               <select
                 value={order.status}
                 onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                disabled={allowedTransitions[order.status].length === 0}
               >
-                <option value='Pending'>Pending</option>
-                <option value='Confirmed'>Confirmed</option>
-                <option value='Shipped'>Shipped</option>
-                <option value='Delivered'>Delivered</option>
-                <option value='Cancelled'>Cancelled</option>
+                <option value={order.status}>{order.status}</option>
+                {allowedTransitions[order.status].map((nextStatus) => (
+                  <option key={nextStatus} value={nextStatus}>
+                    {nextStatus}
+                  </option>
+                ))}
               </select>
             </div>
 

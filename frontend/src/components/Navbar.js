@@ -15,12 +15,25 @@ const Navbar = () => {
   return (
     <div className='navbar'>
       <h3>🌱 Jhaad Ugao</h3>
-      <Link to={'/favorites'}>
-        <button>❤ Favorites</button>
-      </Link>
-      <Link to={'/cart'}>
-        <button>Cart 🛒</button>
-      </Link>
+
+      {user?.role === 'admin' ? (
+        <Link to='/admin/orders'>
+          <button>📦 Manage Orders</button>
+        </Link>
+      ) : (
+        <>
+          <Link to={'/favorites'}>
+            <button>❤ Favorites</button>
+          </Link>
+          <Link to={'/cart'}>
+            <button>Cart 🛒</button>
+          </Link>
+          <Link to={'/orders'}>
+            <button>📦 My Orders</button>
+          </Link>
+        </>
+      )}
+
       <div>
         <span>
           {user?.name}({user?.role})
