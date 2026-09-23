@@ -5,6 +5,7 @@ import { fetchPlants } from '../features/plants/plantSlice'
 import { deletePlant } from '../features/plants/plantSlice'
 import { fetchCategories } from '../features/categories/categorySlice'
 import { toast } from 'react-toastify'
+import API, { SERVER_URL } from '../api/axios'
 
 const PlantList = ({ setEditingPlant }) => {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -211,7 +212,7 @@ const PlantList = ({ setEditingPlant }) => {
               <td>{plant.description}</td>
               <td>
                 <img
-                  src={`http://localhost:5000${plant.image}`}
+                  src={`${SERVER_URL}${plant.image}`}
                   alt={plant.name}
                   width='100'
                 />

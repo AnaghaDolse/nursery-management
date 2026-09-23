@@ -1,8 +1,10 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: process.env.REACT_APP_API_URL,
 })
+
+export const SERVER_URL = process.env.REACT_APP_API_URL.replace('/api', '')
 
 //Request Interceptor (attach token)
 API.interceptors.request.use((req) => {

@@ -49,7 +49,7 @@ export const updatePlant = createAsyncThunk(
   'plants/updatePlant',
   async ({ id, updatedData }) => {
     const response = await API.put(
-      `http://localhost:5000/api/plants/${id}`,
+      `/plants/${id}`,
       updatedData,
       {
         headers: {

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import API from '../api/axios'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState(' ')
@@ -15,7 +16,7 @@ const ForgotPassword = () => {
     setLoading(true)
 
     try {
-      await axios.post('http://localhost:5000/api/auth/forgot-password', {
+      await API.post('/auth/forgot-password', {
         email,
       })
 

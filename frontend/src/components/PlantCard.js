@@ -5,6 +5,7 @@ import { addToCart } from '../features/cart/cartSlice'
 import { toast } from 'react-toastify'
 
 const PlantCard = ({ plant }) => {
+  const API_URL = process.env.REACT_APP_API_URL.replace('/api', '')
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -23,7 +24,7 @@ const PlantCard = ({ plant }) => {
 
   return (
     <div className='plant-card'>
-      <img src={`http://localhost:5000${plant.image}`} alt={plant.name} />
+      <img src={`${API_URL}${plant.image}`} alt={plant.name} />
 
       <h3>{plant.name}</h3>
 

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { loginSuccess } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import API from '../api/axios'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -23,8 +24,8 @@ const Login = () => {
     e.preventDefault()
     setLoading(true)
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/login',
+      const response = await API.post(
+        '/auth/login',
         {
           email,
           password,

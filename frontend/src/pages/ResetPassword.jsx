@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import API from '../api/axios'
 
 const ResetPassword = () => {
   const { token } = useParams()
@@ -27,19 +28,16 @@ const ResetPassword = () => {
       toast.error('Password must be at least 6 characters')
       return
     }
-     if (!token) {
-       toast.error('Invalid reset link')
-       return
-     }
+    if (!token) {
+      toast.error('Invalid reset link')
+      return
+    }
     setLoading(true)
 
     try {
-      await axios.post(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
-        {
-          password,
-        },
-      )
+      await API.post(`/auth/reset-password/${token}`, {
+        password,
+      })
       toast.success('Password reset successfully')
 
       setTimeout(() => {
