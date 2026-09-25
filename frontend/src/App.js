@@ -24,8 +24,10 @@ function App() {
   const [editingPlant, setEditingPlant] = useState(null)
   const { token, user } = useSelector((state) => state.auth)
 
-  const storedToken =
-    localStorage.getItem('token') || sessionStorage.getItem('token')
+  const isAuthenticated =
+    !!token ||
+    !!localStorage.getItem('token') ||
+    !!sessionStorage.getItem('token')
 
   // useEffect(() => {
   //   if (token) {
@@ -44,7 +46,7 @@ function App() {
           {/*Login Route*/}
           <Route
             path='/'
-            element={storedToken ? <Navigate to='/add-plant' /> : <Login />}
+            element={isAuthenticated ? <Navigate to='/' /> : <Login />}
           />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password/:token' element={<ResetPassword />} />
@@ -108,20 +110,21 @@ function App() {
                 <Orders />
               </ProtectedRoute>
             }
-          /><Route
-          path='/admin/orders'
-          element={
-            <ProtectedRoute>
-              {user?.role === 'admin' ? (
-                <AdminOrders />
-              ) : (
-                <Navigate to='/add-plant' />
-              )}
-            </ProtectedRoute>
-          }
-        />
+          />
+          <Route
+            path='/admin/orders'
+            element={
+              <ProtectedRoute>
+                {user?.role === 'admin' ? (
+                  <AdminOrders />
+                ) : (
+                  <Navigate to='/' />
+                )}
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-        
+
         <ToastContainer />
       </div>
     </Router>

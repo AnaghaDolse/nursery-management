@@ -91,7 +91,7 @@ export const forgotPassword = async (req, res) => {
 
     await user.save()
 
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
 
     const message = `You requested a password reset.
     

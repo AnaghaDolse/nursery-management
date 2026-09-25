@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPlantById } from '../features/plants/plantSlice'
+import API, { SERVER_URL } from '../api/axios'
 
 const PlantDetails = () => {
   const { id } = useParams()
@@ -24,7 +25,7 @@ const PlantDetails = () => {
       <button onClick={() => navigate(-1)}>⬅ Back</button>
 
       <img
-        src={`http://localhost:5000${selectedPlant.image}`}
+        src={`${SERVER_URL}${selectedPlant.image}`}
         alt={selectedPlant.name}
       />
 

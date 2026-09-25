@@ -7,6 +7,7 @@ import {
 } from '../features/cart/cartSlice'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import API, { SERVER_URL } from '../api/axios'
 
 const Cart = () => {
   const dispatch = useDispatch()
@@ -43,10 +44,10 @@ const Cart = () => {
           <div className='cart-card' key={item.plant._id}>
             <div className='cart-image'>
               <img
-                src={`http://localhost:5000${item.plant.image}`}
-                alt={item.plant.name}
-                width='100'
-              />{' '}
+  src={`${SERVER_URL}${item.plant.image}`}
+  alt={item.plant.name}
+  width='100'
+/>
             </div>{' '}
             <div className='card-details'>
               <h3>{item.plant.name}</h3>{' '}
