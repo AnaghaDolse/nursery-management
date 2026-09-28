@@ -1,4 +1,5 @@
 import Plant from '../models/Plant.js'
+import cloudinary from '../config/cloudinary.js'
 
 // Get all plants
 export const getPlants = async (req, res) => {
@@ -55,14 +56,34 @@ export const getPlantById = async (req, res) => {
 export const addPlant = async (req, res) => {
   const { name, price, stock, description } = req.body
 
-  //parse category array
-  const category = JSON.parse(req.body.category)
-    ? JSON.parse(req.body.category)
-    : []
-
-  const image = req.file ? `/uploads/${req.file.filename}` : null
-
   try {
+    // Parse category array
+    const category = req.body.category ? JSON.parse(req.body.category) : []
+
+    let image = null
+
+    // Upload image to Cloudinary
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'jhaad-ugao/plants',
+          },
+          (error, result) => {
+            if (error) {
+              reject(error)
+            } else {
+              resolve(result)
+            }
+          },
+        )
+
+        uploadStream.end(req.file.buffer)
+      })
+
+      image = result.secure_url
+    }
+
     const newPlant = new Plant({
       name,
       category,
@@ -73,6 +94,7 @@ export const addPlant = async (req, res) => {
     })
 
     await newPlant.save()
+
     res.status(201).json(newPlant)
   } catch (error) {
     console.log(error)

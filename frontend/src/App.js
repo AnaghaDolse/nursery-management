@@ -46,7 +46,7 @@ function App() {
           {/*Login Route*/}
           <Route
             path='/'
-            element={isAuthenticated ? <Navigate to='/' /> : <Login />}
+            element={isAuthenticated ? <Navigate to='/add-plant' /> : <Login />}
           />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password/:token' element={<ResetPassword />} />
@@ -118,7 +118,7 @@ function App() {
                 {user?.role === 'admin' ? (
                   <AdminOrders />
                 ) : (
-                  <Navigate to='/' />
+                  <Navigate to='/add-plant' />
                 )}
               </ProtectedRoute>
             }

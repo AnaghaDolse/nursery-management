@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import API from '../../api/axios'
 
-const token = localStorage.getItem('token')
+const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
 export const fetchPlants = createAsyncThunk(
   'plants/fetchPlants',
@@ -11,15 +11,13 @@ export const fetchPlants = createAsyncThunk(
     if (page) params.append('page', page)
     if (limit) params.append('limit', limit)
     if (search) params.append('search', search)
+
     if (selectedCategories && selectedCategories.length > 0) {
       params.append('category', selectedCategories.join(','))
     }
 
-    const response = await API.get(`/plants?${params.toString()}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const response = await API.get(`/plants?${params.toString()}`)
+
     return response.data
   },
 )
@@ -30,9 +28,9 @@ export const addPlant = createAsyncThunk(
     const response = await API.post('/plants', plantData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
       },
     })
+
     return response.data
   },
 )
@@ -48,16 +46,12 @@ export const fetchPlantById = createAsyncThunk(
 export const updatePlant = createAsyncThunk(
   'plants/updatePlant',
   async ({ id, updatedData }) => {
-    const response = await API.put(
-      `/plants/${id}`,
-      updatedData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await API.put(`/plants/${id}`, updatedData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
-    )
+    })
+
     return response.data
   },
 )
