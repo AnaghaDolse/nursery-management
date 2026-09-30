@@ -103,6 +103,43 @@ export const addPlant = async (req, res) => {
 }
 
 // Update plant
+// export const updatePlant = async (req, res) => {
+//   try {
+//     const { id } = req.params
+//     const { name, price, stock, description } = req.body
+
+//     const updatedData = {
+//       name,
+//       price,
+//       stock,
+//       description,
+//     }
+
+//     if (req.body.category) {
+//       updatedData.category = JSON.parse(req.body.category)
+//     }
+
+//     if (req.file) {
+//       updatedData.image = `/uploads/${req.file.filename}`
+//     }
+
+//     const updatedPlant = await Plant.findByIdAndUpdate(id, updatedData, {
+//       new: true,
+//     })
+
+//     if (!updatedPlant) {
+//       return res.status(404).json({ message: 'Plant not found' })
+//     }
+
+//     res.status(200).json({
+//       message: 'Plant updated successfully',
+//       plant: updatedPlant,
+//     })
+//   } catch (error) {
+//     res.status(500).json({ message: error.message })
+//   }
+// }
+
 export const updatePlant = async (req, res) => {
   try {
     const { id } = req.params
@@ -119,8 +156,26 @@ export const updatePlant = async (req, res) => {
       updatedData.category = JSON.parse(req.body.category)
     }
 
+    // Upload new image to Cloudinary
     if (req.file) {
-      updatedData.image = `/uploads/${req.file.filename}`
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'jhaad-ugao/plants',
+          },
+          (error, result) => {
+            if (error) {
+              reject(error)
+            } else {
+              resolve(result)
+            }
+          },
+        )
+
+        uploadStream.end(req.file.buffer)
+      })
+
+      updatedData.image = result.secure_url
     }
 
     const updatedPlant = await Plant.findByIdAndUpdate(id, updatedData, {
@@ -136,6 +191,7 @@ export const updatePlant = async (req, res) => {
       plant: updatedPlant,
     })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message })
   }
 }

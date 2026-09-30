@@ -5,10 +5,12 @@ import { fetchPlants } from '../features/plants/plantSlice'
 import { deletePlant } from '../features/plants/plantSlice'
 import { fetchCategories } from '../features/categories/categorySlice'
 import { toast } from 'react-toastify'
-import API, { SERVER_URL } from '../api/axios'
+import API  from '../api/axios'
 
 const PlantList = ({ setEditingPlant }) => {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user =
+    JSON.parse(localStorage.getItem('user')) ||
+    JSON.parse(sessionStorage.getItem('user'))
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { data, loading, error, pages, total } = useSelector(
@@ -211,11 +213,7 @@ const PlantList = ({ setEditingPlant }) => {
               <td>{plant.stock}</td>
               <td>{plant.description}</td>
               <td>
-                <img
-                  src={`${SERVER_URL}${plant.image}`}
-                  alt={plant.name}
-                  width='100'
-                />
+                <img src={plant.image} alt={plant.name} width='100' />
               </td>
               <td>
                 {user?.role === 'admin' && (

@@ -9,14 +9,12 @@ import plantRoutes from './routes/plantRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
-import path from 'path'
 
 dotenv.config()
 const app = express()
 
 app.use(cors({ origin: process.env.FRONTEND_URL }))
 app.use(express.json())
-app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')))
 
 // MongoDB connection
 // mongoose
