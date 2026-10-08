@@ -5,18 +5,51 @@ export const addToCart = async (req, res) => {
   try {
     const { plantId } = req.body
 
+    if (!plantId) {
+      return res.status(400).json({
+        message: 'Plant ID is required',
+      })
+    }
+
+    const plant = await Plant.findById(plantId)
+
+    if (!plant) {
+      return res.status(404).json({
+        message: 'Plant not found',
+      })
+    }
+
+    if (plant.stock <= 0) {
+      return res.status(400).json({
+        message: `${plant.name} is out of stock`,
+      })
+    }
+
     const user = await User.findById(req.user.id)
+
     if (!user) {
-      return res.status(404).json({ message: 'user not found' })
+      return res.status(404).json({
+        message: 'User not found',
+      })
     }
 
     const existingItem = user.cart.find(
       (item) => item.plant.toString() === plantId,
     )
+
     if (existingItem) {
+      if (existingItem.quantity >= plant.stock) {
+        return res.status(400).json({
+          message: `Only ${plant.stock} ${plant.name} available in stock`,
+        })
+      }
+
       existingItem.quantity += 1
     } else {
-      user.cart.push({ plant: plantId, quantity: 1 })
+      user.cart.push({
+        plant: plantId,
+        quantity: 1,
+      })
     }
 
     await user.save()
@@ -28,7 +61,15 @@ export const addToCart = async (req, res) => {
       cart: updatedUser.cart,
     })
   } catch (error) {
-    return res.status(500).json({ message: error.message })
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        message: 'Invalid plant ID',
+      })
+    }
+
+    return res.status(500).json({
+      message: error.message,
+    })
   }
 }
 
